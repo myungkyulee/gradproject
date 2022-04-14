@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>대기자명</th>
+                <th>인원</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody> <tr th:each="waiting : ${waitings}">
+                <td th:text="${waiting.user.name}"></td>
+                <td th:text="${waiting.peopleNum}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>

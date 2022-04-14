@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>my project</title>
+</head>
+<body>
+<header class="welcome-header">
+    <h1 class="welcome-header__title">졸업프로젝트</h1>
+</header>
+<!--store면 store페이지로 user면 user페이지로 -->
+<form id="login-form" action="/" method="post">
+    <div class="chioice-form">
+        <label class="chioice-form__label">User or Store</label>
+        <select name="type" class="chioice-form__select">
+            <option value="">선택</option>
+            <option value="user">User</option>
+            <option value="store">Store</option>
+        </select>
+    </div>
+    <input name="loginId" type="text" placeholder="username" />
+    <input name="password" type="password" placeholder="password" />
+    <input type="submit" value="Log In" />
+</form>
+<div class="btn-signup">
+    <a href="member/add">Sign Up</a>
+</div>
+</body>
+</html>

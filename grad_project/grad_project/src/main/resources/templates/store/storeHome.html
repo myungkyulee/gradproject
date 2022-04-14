@@ -1,0 +1,54 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:action="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, height=device-height, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+</head>
+<body>
+<header>
+    <h2 th:text="${store.name}"></h2>
+    <form action="/logout" method="post">
+        <input type="submit" value="로그아웃"/>
+    </form>
+</header>
+<form action="" method="POST">
+    <div class="input-box">
+        <label for="restTable">남은자리수 </label>
+        <span th:text="${store.restTableCount}"></span>
+        <input id="restTable" type="text" name="restTable" placeholder="남은자리수입력하세요">
+    </div>
+    <input type="submit" value="입력">
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>대기자명</th>
+                <th>인원</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody> <tr th:each="waiting : ${store.waitingList}">
+                <form>
+                    <td th:text="${waiting.user.name}"></td>
+                    <td th:text="${waiting.peopleNum}"></td>
+                    <td>
+                        <a th:if="${waiting.status.name() == 'WAIT'}" href="#"
+                           th:href="'javascript:enter('+${waiting.id}+')'"
+                           class="btn btn-danger">입장</a>
+                    </td>
+                </form>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+</body>
+<script>
+ function enter(id) {
+ var form = document.createElement("form");
+ form.setAttribute("method", "post");
+ form.setAttribute("action", "/store/" + id + "/entrance")
+ document.body.appendChild(form);
+ form.submit();
+ }</script>
+</html>
+
