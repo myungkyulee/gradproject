@@ -12,7 +12,7 @@
     <h1 class="welcome-header__title">졸업프로젝트</h1>
 </header>
 <!--store면 store페이지로 user면 user페이지로 -->
-<form id="login-form" action="/" method="post">
+<form class="login-form" action="/" method="post">
     <div class="chioice-form">
         <label class="chioice-form__label">User or Store</label>
         <select name="type" class="chioice-form__select">
@@ -25,8 +25,9 @@
     <input name="password" type="password" placeholder="password" />
     <input type="submit" value="Log In" />
 </form>
-<div class="btn-signup">
-    <a href="member/add">Sign Up</a>
-</div>
+<form class="login-form" action="/member" method="get">
+    <input type="submit" value="Sign Up" />
+</form>
+
 </body>
 </html>

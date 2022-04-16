@@ -44,6 +44,10 @@ public class WaitingService {
     @Transactional
     public void enterWaiting(Long waitingId) {
         Waiting waiting = waitingRepository.findById(waitingId);
+        Store store = waiting.getStore();
+        int count = store.getRestTableCount();
+        store.setRestTableCount(count + 1);
+
         waiting.enter();
     }
 

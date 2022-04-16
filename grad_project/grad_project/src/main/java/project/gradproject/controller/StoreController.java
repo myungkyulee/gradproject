@@ -66,10 +66,10 @@ public class StoreController {
     @GetMapping
     public String storeHome(HttpServletRequest request, Model model){
         HttpSession session = request.getSession(false);
-        if(session==null) return "home";
+        if(session==null) return "redirect:/";
 
         Long loginStoreId = (Long) session.getAttribute("loginStoreId");
-        if(loginStoreId==null) return "home";
+        if(loginStoreId==null) return "redirect:/";
 
         Store store = storeService.findOne(loginStoreId);
         List<Waiting> waitings = store.getWaitingList();
@@ -86,13 +86,24 @@ public class StoreController {
         return "store/storeHome";
     }
 
-    @PostMapping("/{storeId}")
+    /*@PostMapping
     public String storeHomeInput(@PathVariable Long storeId,
                              @RequestParam("restTable") int restTable){
         System.out.println("tableCount OK");
         storeService.updateStore(storeId, restTable);
 
         return "redirect:/store/{storeId}";
+    }*/
+    @PostMapping
+    public String storeHomeInput(HttpServletRequest request,
+                             @RequestParam("restTable") int restTable){
+        HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
+        Long storeId = (Long) session.getAttribute("loginStoreId");
+        if(storeId==null) return "redirect:/";
+        storeService.updateStore(storeId, restTable);
+
+        return "redirect:/store";
     }
 
     @PostMapping("/{waitingId}/entrance")
@@ -101,14 +112,6 @@ public class StoreController {
         return "redirect:/store";
     }
 
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request){
-        System.out.println("logoutok");
-        HttpSession session = request.getSession(false);
-        if(session!=null) {
-            session.invalidate();
-        }
-        return "redirect:/";
-    }
+
 
 }

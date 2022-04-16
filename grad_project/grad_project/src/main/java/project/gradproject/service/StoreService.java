@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.repository.StoreRepository;
 
 import java.util.List;
@@ -59,5 +60,23 @@ public class StoreService {
         if(store.getTableCount()<restTable) return;
         else if(restTable<0) return;
         store.setRestTableCount(restTable);
+    }
+
+    @Transactional
+    public void openStore(Long id) {
+        Store store = storeRepository.findById(id);
+
+        store.setStoreStatus(StoreStatus.OPEN);
+
+        int waitingCount = store.getWaitingList().size();
+        int tableCount = store.getTableCount();
+        store.setRestTableCount(tableCount-waitingCount);
+    }
+    @Transactional
+    public void closeStore(Long id) {
+        Store store = storeRepository.findById(id);
+
+        store.setStoreStatus(StoreStatus.CLOSED);
+        store.setRestTableCount(0);
     }
 }
