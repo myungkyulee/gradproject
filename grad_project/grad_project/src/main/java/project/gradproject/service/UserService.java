@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.user.User;
+import project.gradproject.domain.waiting.Waiting;
+import project.gradproject.domain.waiting.WaitingStatus;
 import project.gradproject.repository.StoreRepository;
 import project.gradproject.repository.UserRepository;
 
@@ -28,9 +30,15 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
-    public List<User> findStores(){
+    public List<User> findUsers(){
         return userRepository.findAll();
     }
+    public User login(String loginId, String password){
+        return userRepository.findbyloginId(loginId)
+                .filter(user -> user.getLoginPassword().equals(password))
+                .orElse(null);
+    }
+
 
     public User findOne(Long userId){
         return userRepository.findById(userId);

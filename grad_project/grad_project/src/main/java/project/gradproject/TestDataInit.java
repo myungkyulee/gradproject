@@ -44,8 +44,8 @@ public class TestDataInit {
         //테스트 유저정보 저장
         User user1=new User();
         user1.setName("이명규");
-        user1.setLoginId("testUser1");
-        user1.setLoginPassword("testUser1!");
+        user1.setLoginId("test");
+        user1.setLoginPassword("test");
 
         User user2=new User();
         user2.setName("변상욱");

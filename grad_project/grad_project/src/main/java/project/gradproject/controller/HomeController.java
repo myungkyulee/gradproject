@@ -2,12 +2,13 @@ package project.gradproject.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.gradproject.domain.MemberLoginForm;
 import project.gradproject.domain.store.Store;
-import project.gradproject.domain.store.StoreStatus;
+import project.gradproject.domain.user.User;
 import project.gradproject.service.StoreService;
 import project.gradproject.service.UserService;
 
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
@@ -84,6 +86,7 @@ public class HomeController {
             return "home";
         }
 
+        // store로그인
         if(member.getType().equals("store")){
             Store loginStore = storeService.login((member.getLoginId()), member.getPassword());
 
@@ -101,7 +104,23 @@ public class HomeController {
 
             return "redirect:/store";
         }
+
+        // 유저로그인
         if(member.getType().equals("user")){
+            User loginUser = userService.login(member.getLoginId(), member.getPassword());
+
+            // 로그인 실패
+            if(loginUser==null) {
+                bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+
+                return "home";
+            }
+
+            // 로그인 성공
+            HttpSession session = request.getSession();
+            session.setAttribute("loginUserId", loginUser.getId());
+
+            return "redirect:/user";
 
         }
 
@@ -109,8 +128,8 @@ public class HomeController {
         return "home";
     }
 
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request){
+    @PostMapping("/store/logout")
+    public String logoutStore(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         Long storeId = (Long) session.getAttribute("loginStoreId");
         storeService.closeStore(storeId);

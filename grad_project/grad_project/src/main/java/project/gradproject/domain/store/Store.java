@@ -27,9 +27,11 @@ public class Store  {
 
     private String address;
 
-    private int tableCount;  // 가게에 있는 총 테이블 개수
+    private Integer tableCount;  // 가게에 있는 총 테이블 개수
 
-    private int restTableCount; // 가게에 비어있는 테이블 개수
+    private Integer restTableCount; // 가게에 비어있는 테이블 개수
+
+    private String info; // 가게 소개
 
     @OneToMany(mappedBy = "store")
     private List<Waiting> waitingList=new ArrayList<>();  // 대기 리스트

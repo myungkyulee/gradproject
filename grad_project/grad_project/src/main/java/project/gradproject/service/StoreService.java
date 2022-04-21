@@ -36,6 +36,10 @@ public class StoreService {
         return storeRepository.findById(storeId);
     }
 
+    public Store findOneByName(String name){
+        return storeRepository.findByName(name).get(0);
+    }
+
     public Store login(String loginId, String password) {
         /*Optional<Store> byLoginId = storeRepository.findByLoginId(loginId);
 
@@ -55,7 +59,7 @@ public class StoreService {
     }
 
     @Transactional
-    public void updateStore(Long id, int restTable) {
+    public void updateStore(Long id, Integer restTable) {
         Store store = storeRepository.findById(id);
         if(store.getTableCount()<restTable) return;
         else if(restTable<0) return;
@@ -72,6 +76,7 @@ public class StoreService {
         int tableCount = store.getTableCount();
         store.setRestTableCount(tableCount-waitingCount);
     }
+
     @Transactional
     public void closeStore(Long id) {
         Store store = storeRepository.findById(id);

@@ -1,0 +1,40 @@
+.store-component {
+  justify-content: space-between;
+}
+
+.store-component,
+.store-component__column:first-child {
+  display: flex;
+  align-items: center;
+}
+
+.store-component__picture {
+  width: 70px;
+  height: 70px;
+  border-radius: 25px;
+  margin-right: 20px;
+}
+
+.store-component__name {
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.store-component__intro {
+  margin-top: 10px;
+  font-size: 17px;
+  color: rgba(0, 0, 0, 0.5);
+}
+.store-component__restTable__title {
+  padding-right: 10px;
+}
+
+.store-component__text:first-child {
+  display: flex;
+}
+
+.user-main-screen {
+  padding: 10px var(--horizontal-space);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}

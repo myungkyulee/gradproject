@@ -7,6 +7,8 @@ import project.gradproject.domain.user.User;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
@@ -25,6 +27,12 @@ public class UserRepository {
         return em.createQuery("select u from User u where u.name = :name",User.class)
                 .setParameter("name",name)
                 .getResultList();
+    }
+
+    public Optional<User> findbyloginId(String loginId){
+        return findAll().stream().filter(user -> user.getLoginId().equals(loginId))
+                .findFirst();
+
     }
 
     public List<User> findAll(){

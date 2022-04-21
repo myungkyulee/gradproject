@@ -2,8 +2,10 @@ package project.gradproject.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.waiting.Waiting;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/store")
 @RequiredArgsConstructor
@@ -96,7 +99,8 @@ public class StoreController {
     }*/
     @PostMapping
     public String storeHomeInput(HttpServletRequest request,
-                             @RequestParam("restTable") int restTable){
+                                 @ModelAttribute("restTable") Integer restTable,
+                                 BindingResult result){
         HttpSession session = request.getSession(false);
         if(session==null) return "redirect:/";
         Long storeId = (Long) session.getAttribute("loginStoreId");

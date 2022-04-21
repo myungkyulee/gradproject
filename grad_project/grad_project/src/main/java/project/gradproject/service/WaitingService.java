@@ -32,6 +32,10 @@ public class WaitingService {
         return waiting.getId();
     }
 
+    public Waiting findWaiting(Long waitingId){
+        return waitingRepository.findById(waitingId);
+    }
+
     public List<Waiting> findWaitings(Long storeId){
 
         return waitingRepository.findStoreWaitingList(storeId);
@@ -46,8 +50,8 @@ public class WaitingService {
         Waiting waiting = waitingRepository.findById(waitingId);
         Store store = waiting.getStore();
         int count = store.getRestTableCount();
-        store.setRestTableCount(count + 1);
-
+        store.setRestTableCount(count - 1);
+        User user = waiting.getUser();
         waiting.enter();
     }
 

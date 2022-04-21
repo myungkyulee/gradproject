@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+<body>
+<header>
+    <h1 class="store-form__title" th:text="${store.name}">가게명</h1>
+</header>
+
+<form action="" method="post">
+    <input
+            required
+            type="text"
+            name="peopleNum"
+            placeholder="매장에 방문하실 인원수를 입력해주세요."
+    />
+    <input type="submit" value="waiting" />
+</form>
+</body>
+</html>

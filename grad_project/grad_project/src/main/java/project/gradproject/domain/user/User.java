@@ -5,6 +5,8 @@ import lombok.Setter;
 import project.gradproject.domain.waiting.Waiting;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -21,6 +23,8 @@ public class User {
     private String loginId;
     private String loginPassword;
 
-    @OneToOne(mappedBy = "user")
-    private Waiting wating;
+    @OneToMany(mappedBy = "user")
+    private List<Waiting> waitingList=new ArrayList<>();
+//    private Integer waitingOnCount;
+
 }

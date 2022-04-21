@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="css/styles.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Home</title>
+</head>
+<body>
+<header>
+    <h2 th:text="${user.name}">유저 이름</h2>
+</header>
+
+
+<main class="user-main-screen" th:each="store:${stores}">
+    <a class="store-component" th:href="@{user/{name}(name=${store.name})}">
+        <div class="store-component__column">
+            <img
+                    src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTExMDZfNjQg%2FMDAxNjM2MTMwMzg2NjE3.7ux8pWAUm2OKjKHASb4JoZPaxlQW2WL0yHWXwKR0N4og.wgSkaPnqjjdKE4tusCCZnGk2VlcJLRcGjCxtz4DFaF0g.JPEG.zeroy94%2F20211105%25A3%25DF191021.jpg&type=sc960_832"
+                    class="store-component__picture"
+            />
+            <div class="store-component__text">
+                <h4 class="store-component__name" th:text="${store.name}">
+                    누구나홀딱반한닭
+                </h4>
+                <!-- th:text="#"-->
+                <h6 class="store-component__intro">
+                    쌈닭화이타가 제일 맛있음
+                </h6>
+            </div>
+        </div>
+        <div class="user-component__column">
+            <div class="store-component__text">
+                <h3 class="store-component__address" th:text="${store.address}">
+                    홍대길거리
+                </h3>
+            </div>
+        </div>
+        <div class="user-component__column">
+            <div class="store-component__text">
+                <h6 class="store-component__restTable__title">남은자리수</h6>
+                <h6
+                        class="store-component__restTable"
+                        th:text="${store.restTableCount}"
+                >
+                    0
+                </h6>
+            </div>
+        </div>
+    </a>
+</main>
+
+<nav class="nav">
+    <ul class="nav__list">
+        <li class="nav__btn">
+            <a class="nav__link" href="friends.html">
+                <i class="fa fa-user fa-2x"></i
+                ></a>
+        </li>
+        <li class="nav__btn">
+            <a class="nav__link" href="#">
+                <span class="nav__notification">1</span>
+                <i class="far fa-comment fa-2x"></i
+                ></a>
+        </li>
+        <li class="nav__btn">
+            <a class="nav__link" href="#"><i class="fas fa-search fa-2x"></i></a>
+        </li>
+        <li class="nav__btn">
+            <a class="nav__link" href="#"
+            ><i class="fas fa-ellipsis-h fa-2x"></i
+            ></a>
+        </li>
+    </ul>
+</nav>
+
+<script
+        src="https://kit.fontawesome.com/6478f529f2.js"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>

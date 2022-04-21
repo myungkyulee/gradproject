@@ -1,6 +1,9 @@
 @import "reset.css";
 @import "variables.css";
 
+@import "components/nav-bar.css";
+@import "components/store-component.css";
+
 .welcome-header {
   text-align: center;
   margin-top: 90px;
@@ -23,7 +26,7 @@
 .login-form input {
   border: none;
   padding: 15px 0px;
-  font-size: 21px;
+  font-size: 25px;
   margin-bottom: 25px;
 }
 .login-form input:not([type="submit"]) {
