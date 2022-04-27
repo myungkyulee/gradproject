@@ -32,6 +32,13 @@ public class StoreService {
         return storeRepository.findAll();
     }
 
+
+    /*public List<Store> findStoresStatus(){
+        return storeRepository.findByStatus(StoreStatus.OPEN);
+    }
+*/
+
+
     public Store findOne(Long storeId){
         return storeRepository.findById(storeId);
     }

@@ -85,6 +85,30 @@
           />
           <div class="field-error" th:errors="*{tableCount}" />
         </div>
+        <div>
+          <label for="info">가게 소개 </label>
+          <input
+                  type="text"
+                  id="info"
+                  th:field="*{info}"
+                  class="form-control"
+                  th:errorclass="field-error"
+          />
+          <div class="field-error" th:errors="*{info}" />
+        </div>
+        <div>
+          <label for="imagePath">가게 사진</label>
+          <input
+                  type="url"
+                  id="imagePath"
+                  th:field="*{imagePath}"
+                  class="form-control"
+                  th:errorclass="field-error"
+          />
+          <div class="field-error" th:errors="*{imagePath}" />
+        </div>
+
+
         <hr class="my-4" />
         <div class="row">
           <div class="col">

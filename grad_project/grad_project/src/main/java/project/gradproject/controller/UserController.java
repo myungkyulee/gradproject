@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
 import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.domain.waiting.WaitingStatus;
@@ -40,9 +41,15 @@ public class UserController {
 
         User user = userService.findOne(loginUserId);
 
+        List<Store> storeList = storeService.findStores();
+       /* List<Store> stores = new ArrayList<>();
 
-        List<Store> stores = storeService.findStores();
-        model.addAttribute("stores",stores);
+        for (Store store : storeList) {
+            if(store.getStoreStatus()==StoreStatus.OPEN) stores.add(store);
+        }*/
+
+
+        model.addAttribute("stores",storeList);
         model.addAttribute("user",user);
         return "user/userHome";
     }
@@ -85,7 +92,8 @@ public class UserController {
         System.out.println("count = " + count);
 
         // 웨이팅은 3개만 가능 or 지금 이 매장에서 웨이팅이 없어야함
-        if (count + 1 > 3 || check != null) {
+        if (count + 1 > 3 || check != null ) {
+
             System.out.println("웨이팅하면 안됨 ");
 
             // 에러를 만들어서 다시 이전화면으로 보낸다. 아니면 따로 에러페이지를 만든다 .

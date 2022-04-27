@@ -33,6 +33,10 @@ public class Store  {
 
     private String info; // 가게 소개
 
+    private String imagePath; // 이미지 경로
+
+
+
     @OneToMany(mappedBy = "store")
     private List<Waiting> waitingList=new ArrayList<>();  // 대기 리스트
 

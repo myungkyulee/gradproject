@@ -4,6 +4,7 @@ package project.gradproject.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.store.StoreStatus;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -42,6 +43,12 @@ public class StoreRepository {
                 .getResultList();
     }
 
+ /*   public List<Store> findByStatus(StoreStatus status){
+        return em.createQuery("select s from Store s where s.store_status = :status",Store.class)
+                .setParameter("status",status)
+                .getResultList();
+    }
+*/
     public List<Store> findAll(){
         return em.createQuery("select s from Store s", Store.class)
                 .getResultList();

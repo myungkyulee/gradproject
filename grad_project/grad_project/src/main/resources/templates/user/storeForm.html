@@ -1,24 +1,85 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="css/styles.css?after" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 </head>
 <body>
-<header>
-    <h1 class="store-form__title" th:text="${store.name}">가게명</h1>
-</header>
+<!-- 왼쪽방향 화살표 넣기 -->
+<div class="store-back">
+    <a href="/user">
+        <i class="fa-solid fa-arrow-left fa-2x"></i>
+    </a>
+</div>
 
-<form action="" method="post">
-    <input
-            required
-            type="text"
-            name="peopleNum"
-            placeholder="매장에 방문하실 인원수를 입력해주세요."
-    />
-    <input type="submit" value="waiting" />
-</form>
+<main class="store-main">
+    <!-- 사진 -->
+    <div>
+        <img
+                src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTExMDZfNjQg%2FMDAxNjM2MTMwMzg2NjE3.7ux8pWAUm2OKjKHASb4JoZPaxlQW2WL0yHWXwKR0N4og.wgSkaPnqjjdKE4tusCCZnGk2VlcJLRcGjCxtz4DFaF0g.JPEG.zeroy94%2F20211105%25A3%25DF191021.jpg&type=sc960_832"
+                th:src="${store.imagePath}"
+                class="store-picture"
+        />
+    </div>
+
+    <!--가게정보 -->
+    <div class="store-info">
+        <h1 class="store-info__name" th:text="${store.name}">
+            누구나홀딱반한닭
+        </h1>
+        <div class="store-info__address" th:text="${store.address}">서울시 서대문구 연희동</div>
+        <!--별점아이콘 넣을지 말지 고민중임!!-->
+        <div class="store-info__value">
+            <a href="#"><i class="fa-solid fa-heart"></i></a>
+        </div>
+    </div>
+
+    <form class="store-input" action="" method="post">
+        <div class="store-input__num">
+            <label for="store-input__peopleNum" class="chioice-form__label"
+            >매장에 방문하실 인원수를 입력해주세요.</label
+            >
+            <input
+                    class="store-input__peopleNum"
+                    id="store-input__peopleNum"
+                    required
+                    type="text"
+                    name="peopleNum"
+            />
+        </div>
+
+        <input class="store-input__btn" type="submit" value="waiting" />
+    </form>
+</main>
+
+<main class="user-main-screen" >
+    <a
+            class="store-component"
+            href="#"
+            th:href="@{user/{name}(name=${store.name})}"
+    >
+        <div class="store-component__column">
+            <img
+                    src="https://mblogthumb-phinf.pstatic.net/MjAxOTA4MDJfNDEg/MDAxNTY0NzQ4OTg5Mjk0.TaYFgszW7uUKR8jyxFkQw58PI5pWvVyQ84OO4VUDArsg.h8SuEzvsP7l0W-NiPdbVlYGTCkCiwM851AYovesUL04g.JPEG.ec3355ec/20190721_234358.jpg?type=w2"
+                    class="store-component__picture"
+            />
+            <div class="store-component__text">
+                <h4 class="store-component__name" th:text="${store.name}">
+                    쌈닭 화이타
+                </h4>
+                <!-- th:text="#"-->
+                <h6 class="store-component__intro">2,1000원</h6>
+            </div>
+        </div>
+    </a>
+</main>
+
+<script
+        src="https://kit.fontawesome.com/ffa043e739.js"
+        crossorigin="anonymous"
+></script>
 </body>
 </html>

@@ -52,6 +52,7 @@ public class JoinController {
         store.setTableCount(storeForm.getTableCount());
         store.setStoreStatus(StoreStatus.CLOSED);
         store.setRestTableCount(store.getTableCount());
+        store.setInfo(storeForm.getInfo());
 
         storeService.join(store);
         return "redirect:/";

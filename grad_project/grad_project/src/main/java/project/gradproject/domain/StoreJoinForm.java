@@ -17,6 +17,11 @@ public class StoreJoinForm {
     private String password;
     @NotEmpty
     private String address;
+
     @NotNull(message = "비어 있을 수 없습니다")
     private Integer tableCount;
+    @NotEmpty
+    private String info;
+    @NotEmpty
+    private String imagePath;
 }

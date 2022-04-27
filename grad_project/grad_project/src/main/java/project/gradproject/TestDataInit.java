@@ -29,8 +29,10 @@ public class TestDataInit {
         store1.setName("GAMARO");
         store1.setTableCount(10);
         store1.setRestTableCount(10);
-        store1.setAddress("대흥동");
+        store1.setAddress("서울시 마포구 대흥동 대흥역 1분거리");
+        store1.setInfo("대흥역 가마로강정인데 가마로는 원래 맛있어");
         store1.setStoreStatus(StoreStatus.CLOSED);
+        store1.setImagePath("https://dnvefa72aowie.cloudfront.net/business/bizPlatform/profile/23534831/1623770243959/e6c6c2482e881b23ba471d27a90eaaa7cdb5fab9615bf54e31b419d49e25873c.jpeg?q=82&s=640x640&t=crop");
 
         Store store2 = new Store();
         store2.setLoginId("qwe");
@@ -38,8 +40,10 @@ public class TestDataInit {
         store2.setName("월순");
         store2.setTableCount(20);
         store2.setRestTableCount(20);
-        store2.setAddress("망원동");
+        store2.setAddress("망원동 월순");
+        store2.setInfo("동태찜 전문점인데 아구찜이 너무 맛있어");
         store2.setStoreStatus(StoreStatus.CLOSED);
+        store2.setImagePath("https://t1.daumcdn.net/cfile/tistory/14469E4E51788ECE1B");
 
         //테스트 유저정보 저장
         User user1=new User();
