@@ -42,12 +42,13 @@ public class UserController {
         User user = userService.findOne(loginUserId);
 
         List<Store> storeList = storeService.findStores();
-       /* List<Store> stores = new ArrayList<>();
+
+        /*List<Store> stores = new ArrayList<>();
 
         for (Store store : storeList) {
             if(store.getStoreStatus()==StoreStatus.OPEN) stores.add(store);
-        }*/
-
+        }
+*/
 
         model.addAttribute("stores",storeList);
         model.addAttribute("user",user);
@@ -106,11 +107,27 @@ public class UserController {
         return "redirect:/user";
     }
 
+
+    @GetMapping("/search")
+    public String searchForm(){
+        return "user/searchForm";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam String keyword, Model model){
+        System.out.println("ok");
+        List<Store> stores = storeService.findKeywordStores(keyword);
+
+        model.addAttribute("stores", stores);
+        return "user/search";
+    }
+
     private List<Waiting> getWaitingOnList(User user) {
+
         List<Waiting> waitingList = user.getWaitingList();
         List<Waiting> waitings = new ArrayList<>();
         for (Waiting waiting : waitingList) {
-            if(waiting.getStatus()== WaitingStatus.WAIT) waitings.add(waiting);
+            if (waiting.getStatus() == WaitingStatus.WAIT) waitings.add(waiting);
         }
         return waitings;
     }

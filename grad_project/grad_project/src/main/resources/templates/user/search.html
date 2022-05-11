@@ -8,11 +8,12 @@
     <title>User Home</title>
 </head>
 <body>
-<header class="top-bar">
-    <div class="top-bar__location">내위치</div>
-</header>
+<form action="" method="post">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" name="keyword" class="search-box" />
 
-<div></div>
+    <input type="submit" value="검색" />
+</form>
 
 <div class="user-main-screen" th:each="store:${stores}">
     <a
@@ -58,12 +59,12 @@
 <nav class="nav">
     <ul class="nav__list">
         <li class="nav__btn">
-            <a class="nav__link" href="userHome.html" th:href="@{/user}">
+            <a class="nav__link" th:href="@{/user}" href="userHome.html">
                 <i class="fa-solid fa-house fa-2x"></i>
             </a>
         </li>
         <li class="nav__btn">
-            <a class="nav__link" href="search.html" th:href="@{/user/search}">
+            <a class="nav__link" th:href="@{/user/search}" href="search.html">
                 <i class="fa-solid fa-magnifying-glass fa-2x"></i>
             </a>
         </li>

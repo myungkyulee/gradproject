@@ -4,11 +4,13 @@ package project.gradproject.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.store.StoreKeyword;
 import project.gradproject.domain.store.StoreStatus;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class StoreRepository {
         }
         return Optional.empty();
 */
+
         return findAll().stream()
                 .filter(m-> m.getLoginId().equals(loginId))
                 .findFirst();
@@ -54,7 +57,17 @@ public class StoreRepository {
                 .getResultList();
     }
 
+    public List<StoreKeyword> findAllByString (String keyword){
 
+        String jpql = "select s" +
+                "from StoreKeyword sk, Keyword k, Store s" +
+                "where sk.store_id = s.id and sk.keyword_id = k.id and k.name like :keyword";
+        String jpql1="select sk from StoreKeyword sk";
+
+        return em.createQuery(jpql1, StoreKeyword.class)
+                .getResultList();
+
+    }
 
 
 

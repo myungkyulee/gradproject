@@ -1,6 +1,7 @@
 package project.gradproject.domain;
 
 import lombok.Data;
+import project.gradproject.domain.store.Address;
 
 
 import javax.validation.constraints.NotEmpty;

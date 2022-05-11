@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.gradproject.domain.StoreJoinForm;
 import project.gradproject.domain.UserJoinForm;
+import project.gradproject.domain.store.Address;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
 import project.gradproject.service.StoreService;
 import project.gradproject.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
@@ -44,19 +48,31 @@ public class JoinController {
         /*if(storeForm.getTableCount()==null){
             result.rejectValue("tableCount",);
         }*/
+
+
+
+        String ad = storeForm.getAddress();
+
+        Address address = storeService.splitAddress(ad);
+
+
+
         Store store = new Store();
         store.setName(storeForm.getName());
         store.setLoginId(storeForm.getLoginId());
         store.setLoginPassword(storeForm.getPassword());
-        store.setAddress(storeForm.getAddress());
+        store.setAddress(address);
         store.setTableCount(storeForm.getTableCount());
         store.setStoreStatus(StoreStatus.CLOSED);
         store.setRestTableCount(store.getTableCount());
         store.setInfo(storeForm.getInfo());
 
         storeService.join(store);
+
+
         return "redirect:/";
     }
+
 
 
     @GetMapping("/addUser")
@@ -78,4 +94,8 @@ public class JoinController {
         userService.join(user);
         return "redirect:/";
     }
+
+
+
+
 }

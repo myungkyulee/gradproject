@@ -11,7 +11,6 @@ import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -51,7 +50,7 @@ class WaitingServiceTest {
         store2.setName("월순");
         store2.setTableCount(20);
         store2.setRestTableCount(20);
-        store2.setAddress("망원동");
+//        store2.setAddress("망원동");
         store2.setStoreStatus(StoreStatus.CLOSED);
         storeService.join(store2);
 

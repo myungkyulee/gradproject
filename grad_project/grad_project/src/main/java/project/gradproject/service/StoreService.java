@@ -3,10 +3,16 @@ package project.gradproject.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.gradproject.domain.Keyword;
+import project.gradproject.domain.store.Address;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.store.StoreKeyword;
 import project.gradproject.domain.store.StoreStatus;
+import project.gradproject.repository.KeywordRepository;
+import project.gradproject.repository.StoreKeywordRepository;
 import project.gradproject.repository.StoreRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +21,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StoreService {
     private final StoreRepository storeRepository;
+    private final KeywordRepository keywordRepository;
+    private final StoreKeywordRepository storeKeywordRepository;
 
     @Transactional
     public Long join(Store store){
@@ -71,6 +79,7 @@ public class StoreService {
         if(store.getTableCount()<restTable) return;
         else if(restTable<0) return;
         store.setRestTableCount(restTable);
+
     }
 
     @Transactional
@@ -90,5 +99,73 @@ public class StoreService {
 
         store.setStoreStatus(StoreStatus.CLOSED);
         store.setRestTableCount(0);
+    }
+
+    @Transactional
+    public void addKeyword(Long storeId,Long keywordId){
+
+        Store store = storeRepository.findById(storeId);
+        Keyword keyword = keywordRepository.findById(keywordId);
+
+        StoreKeyword storeKeyword=StoreKeyword.createStoreKeyword(keyword);
+        store.getStoreKeywords().add(storeKeyword);
+        storeKeyword.setStore(store);
+        storeKeywordRepository.save(storeKeyword);
+    }
+
+
+    public Address splitAddress(String ad) {
+        String s="";
+        List<String> list = new ArrayList<>();
+        boolean check=false;
+        int index=0;
+        for(int i=0;i<ad.length();i++){
+            if(ad.charAt(i)!=' '){
+                check=true;
+                index=i;
+                break;
+            }
+        }
+
+        if(check){
+            for(int i = index; i< ad.length(); i++){
+                if(ad.charAt(i)==' ') {
+                    if(s=="") continue;
+                    list.add(s);
+                }
+                else {
+                    s+= ad.charAt(i);
+                    continue;
+                }
+                s="";
+            }
+        }
+        list.add(s);
+        String str="";
+        for(int i=4;i<list.size();i++){
+            str+=list.get(i)+' ';
+        }
+        Address address = new Address(list.get(0),list.get(1),list.get(2),list.get(3),str);
+        return address;
+    }
+
+    /*public List<StoreKeyword> findKeywordStores(String keyword){
+        return storeRepository.findAllByString(keyword);
+    }*/
+
+    public List<Store> findKeywordStores(String keyword) {
+        List<Store> stores = findStores();
+        System.out.println(stores.size());
+        List<Store> storeList = new ArrayList<>();
+        for(Store store:stores){
+            List<StoreKeyword> storeKeywords = store.getStoreKeywords();
+            for(StoreKeyword storeKeyword:storeKeywords){
+                if(storeKeyword.getKeyword().getName().equals(keyword)){
+                    storeList.add(store);
+                    break;
+                }
+            }
+        }
+        return storeList;
     }
 }

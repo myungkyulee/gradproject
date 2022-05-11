@@ -27,7 +27,6 @@ public class WaitingRepository {
                 "where s.id = :storeId";
         List<Waiting> w = em.createQuery(jpql, Waiting.class).setParameter("storeId", storeId)
                 .getResultList();
-
         return w;
     }
 }

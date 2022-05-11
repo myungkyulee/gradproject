@@ -10,14 +10,17 @@ import project.gradproject.domain.waiting.WaitingStatus;
 import project.gradproject.repository.StoreRepository;
 import project.gradproject.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 @Service
 @Transactional(readOnly =true)
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final StoreRepository storeRepository;
 
     @Transactional
     public Long join(User user){
@@ -39,8 +42,59 @@ public class UserService {
                 .orElse(null);
     }
 
-
     public User findOne(Long userId){
         return userRepository.findById(userId);
     }
+
+
+    public List<String> splitKeyword(String searchStr){
+        String s="";
+        List<String> list = new ArrayList<>();
+        boolean check=false;
+        int index=0;
+        for(int i=0;i<searchStr.length();i++){
+            if(searchStr.charAt(i)!=' '){
+                check=true;
+                index=i;
+                break;
+            }
+        }
+
+        if(check){
+            for(int i = index; i< searchStr.length(); i++){
+                if(searchStr.charAt(i)==' ') {
+                    if(s=="") continue;
+                    list.add(s);
+                }
+                else {
+                    s+= searchStr.charAt(i);
+                    continue;
+                }
+                s="";
+            }
+        }
+        list.add(s);
+        return list;
+    }
+
+    /*public List<Store> checkKeyword(String searchStr){
+        List<String> keywords = splitKeyword(searchStr);
+
+        List<Store> stores = storeRepository.findAll();
+        for(int i=0;i<keywords.size();i++){
+            for(Store store : stores){
+                Map<String, Boolean> key = store.getKeywords();
+                if(key.get(keywords.get(i))){
+
+                }
+            }
+        }
+
+
+    }*/
+
+
+
+
+
 }

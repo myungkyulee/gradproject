@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Home</title>
+</head>
+<body>
+<form action="" method="post">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" name="keyword" class="search-box" />
+
+    <input type="submit" value="검색" />
+</form>
+
+<div>최근 검색어</div>
+
+
+
+
+
+
+
+
+
+<nav class="nav">
+    <ul class="nav__list">
+        <li class="nav__btn">
+            <a class="nav__link" th:href="@{/user}" href="userHome.html">
+                <i class="fa-solid fa-house fa-2x"></i>
+            </a>
+        </li>
+        <li class="nav__btn">
+            <a class="nav__link" th:href="@{/user/search}" href="search.html">
+                <i class="fa-solid fa-magnifying-glass fa-2x"></i>
+            </a>
+        </li>
+        <li class="nav__btn">
+            <a class="nav__link" href="#">
+                <i class="fa-solid fa-heart fa-2x"></i>
+            </a>
+        </li>
+        <li class="nav__btn">
+            <a class="nav__link" href="#">
+                <i class="fa-solid fa-user fa-2x"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<script
+        src="https://kit.fontawesome.com/ffa043e739.js"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>

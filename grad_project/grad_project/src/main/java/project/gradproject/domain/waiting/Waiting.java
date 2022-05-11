@@ -33,7 +33,6 @@ public class Waiting {
     public void setUser(User user){
         this.user=user;
         user.getWaitingList().add(this);
-
     }
 
 

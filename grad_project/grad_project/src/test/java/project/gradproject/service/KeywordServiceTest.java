@@ -1,32 +1,38 @@
-package project.gradproject;
+package project.gradproject.service;
 
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import project.gradproject.domain.Keyword;
 import project.gradproject.domain.store.Address;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.store.StoreKeyword;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
-import project.gradproject.service.KeywordService;
-import project.gradproject.service.StoreService;
-import project.gradproject.service.UserService;
-import project.gradproject.service.WaitingService;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
 
-@Component
-@RequiredArgsConstructor
-public class TestDataInit {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+public class KeywordServiceTest {
+    @Autowired
+    private UserService userService;
 
-    private final StoreService storeService;
-    private final UserService userService;
-    private final WaitingService waitingService;
-    private final KeywordService keywordService;
+    @Autowired
+    private StoreService storeService;
 
-    @PostConstruct
-    public void init(){
-        // 테스트 가게정보 저장
+    @Autowired
+    private WaitingService waitingService;
+    @Autowired
+    private KeywordService keywordService;
+
+    @Test
+    public void a(){
         Store store1 = new Store();
         store1.setLoginId("dlaudrb");
         store1.setLoginPassword("asd123!");
@@ -107,9 +113,20 @@ public class TestDataInit {
         storeService.addKeyword(store2.getId(), keyword1.getId());
         storeService.addKeyword(store2.getId(), keyword3.getId());
 
+        List<User> users = userService.findUsers();
+        System.out.println(users.size());
 
-
-
+        List<Store> stores = storeService.findStores();
+        System.out.println(stores.size());
+        for(Store s:stores){
+            System.out.println(s.getName());
+        }
+        /*String keyword="아구찜";
+        List<Store> stores = storeService.findKeywordStores(keyword);
+        System.out.println(stores.size());
+        for(Store s:stores){
+            System.out.println(s.getName()+" : "+s.getName());
+        }*/
 
 
     }
