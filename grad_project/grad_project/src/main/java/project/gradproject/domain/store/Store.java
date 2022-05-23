@@ -4,6 +4,7 @@ package project.gradproject.domain.store;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import project.gradproject.domain.Favorite;
 import project.gradproject.domain.waiting.Waiting;
 
 
@@ -45,6 +46,10 @@ public class Store  {
 
     @OneToMany(mappedBy = "store")
     private List<Waiting> waitingList = new ArrayList<>();  // 대기 리스트
+
+
+
+
 
     @Enumerated(EnumType.STRING)
     private StoreStatus storeStatus;  // 매장 오픈 여부

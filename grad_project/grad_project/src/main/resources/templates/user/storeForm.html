@@ -10,7 +10,7 @@
 <body>
 <!-- 왼쪽방향 화살표 넣기 -->
 <div class="store-back">
-    <a href="/user">
+    <a th:href="@{/user}" href="userHome.html">
         <i class="fa-solid fa-arrow-left fa-2x"></i>
     </a>
 </div>
@@ -30,10 +30,31 @@
         <h1 class="store-info__name" th:text="${store.name}">
             누구나홀딱반한닭
         </h1>
-        <div class="store-info__address" th:text="${store.address}">서울시 서대문구 연희동</div>
+        <div class="store-info__address" th:text="${store.address}">
+            서울시 서대문구 연희동
+        </div>
         <!--별점아이콘 넣을지 말지 고민중임!!-->
-        <div class="store-info__value">
-            <a href="#"><i class="fa-solid fa-heart"></i></a>
+        <div class="store-info__favorite">
+
+            <!--찜하기가 참일때 빨간하트-->
+            <a
+                    th:if="${check}==true"
+                    class="store-info__favorite__true"
+                    href="#"
+                    th:href="@{favorite/{name}(name=${store.name})}"
+            >
+                <i class="fa-solid fa-heart"></i>
+            </a>
+
+            <!--찜하기가 참일때 빈하트-->
+            <a
+                    th:if="${check}==false"
+                    class="store-info__favorite__false"
+                    href="#"
+                    th:href="@{favorite/{name}(name=${store.name})}"
+            >
+                <i class="fa-solid fa-heart"></i>
+            </a>
         </div>
     </div>
 
@@ -55,7 +76,7 @@
     </form>
 </main>
 
-<main class="user-main-screen" >
+<main class="user-main-screen">
     <a
             class="store-component"
             href="#"

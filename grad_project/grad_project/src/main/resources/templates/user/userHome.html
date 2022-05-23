@@ -9,7 +9,7 @@
 </head>
 <body>
 <header class="top-bar">
-    <div class="top-bar__location">내위치</div>
+    <div class="top-bar__location" th:text="${user.name}">내위치</div>
 </header>
 
 <div></div>
@@ -68,7 +68,7 @@
             </a>
         </li>
         <li class="nav__btn">
-            <a class="nav__link" href="#">
+            <a class="nav__link" href="favorite.html" th:href="@{/user/favorite}">
                 <i class="fa-solid fa-heart fa-2x"></i>
             </a>
         </li>

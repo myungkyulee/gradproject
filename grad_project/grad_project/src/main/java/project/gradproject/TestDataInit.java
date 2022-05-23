@@ -51,6 +51,18 @@ public class TestDataInit {
         store2.setStoreStatus(StoreStatus.CLOSED);
         store2.setImagePath("https://t1.daumcdn.net/cfile/tistory/14469E4E51788ECE1B");
 
+        Store store3 = new Store();
+        store3.setLoginId("asd");
+        store3.setLoginPassword("asd");
+        store3.setName("간판없는가게");
+        store3.setTableCount(20);
+        store3.setRestTableCount(20);
+        Address address2 = storeService.splitAddress("서울시 종로구 익선동");
+        store3.setAddress(address2);
+        store3.setInfo("파스타 맛있어 진심");
+        store3.setStoreStatus(StoreStatus.CLOSED);
+        store3.setImagePath("https://img.siksinhot.com/place/1536302691681018.jpg?w=307&h=300&c=Y");
+
         //테스트 유저정보 저장
         User user1=new User();
         user1.setName("이명규");
@@ -80,10 +92,19 @@ public class TestDataInit {
         Keyword keyword4 = new Keyword();
         keyword4.setName("대흥동");
 
+        Keyword keyword5 = new Keyword();
+        keyword5.setName("마포");
+
+        Keyword keyword6 = new Keyword();
+        keyword6.setName("서울");
+
+
         keywordService.saveKeyword(keyword1);
         keywordService.saveKeyword(keyword2);
         keywordService.saveKeyword(keyword3);
         keywordService.saveKeyword(keyword4);
+        keywordService.saveKeyword(keyword5);
+        keywordService.saveKeyword(keyword6);
 
 
 
@@ -95,6 +116,7 @@ public class TestDataInit {
 
         storeService.join(store1);
         storeService.join(store2);
+        storeService.join(store3);
 
         waitingService.waiting(user1.getId(),store1.getId(),2);
         waitingService.waiting(user2.getId(),store1.getId(),4);
@@ -106,8 +128,12 @@ public class TestDataInit {
         storeService.addKeyword(store1.getId(), keyword2.getId());
         storeService.addKeyword(store2.getId(), keyword1.getId());
         storeService.addKeyword(store2.getId(), keyword3.getId());
-
-
+        storeService.addKeyword(store2.getId(), keyword5.getId());
+        storeService.addKeyword(store1.getId(), keyword5.getId());
+        storeService.addKeyword(store2.getId(), keyword6.getId());
+        storeService.addKeyword(store1.getId(), keyword6.getId());
+        storeService.addKeyword(store3.getId(), keyword6.getId());
+        storeService.addKeyword(store3.getId(), keyword6.getId());
 
 
 

@@ -74,5 +74,13 @@ class WaitingServiceTest {
         waitingService.enterWaiting();
     }*/
 
+    @Test
+    void test(){
+        String str="  망원동  아구찜    ";
+        String[] keywords = str.split(" ");
+        for (String s : keywords) {
+            System.out.println("a"+s+"a");
+        }
+    }
 
 }

@@ -8,18 +8,6 @@
     <title>User Home</title>
 </head>
 <body>
-<form class="search-form" action="" method="get">
-    <input
-            class="search-form__text"
-            type="text"
-            name="keyword"
-            placeholder="지역, 매장명, 카테고리"
-    />
-    <button type="submit" class="search-form__btn">
-        <i class="fa-solid fa-magnifying-glass"></i>
-    </button>
-</form>
-
 <div class="user-main-screen" th:each="store:${stores}">
     <a
             class="store-component"
@@ -37,7 +25,9 @@
                     누구나홀딱반한닭
                 </h4>
                 <!-- th:text="#"-->
-                <h6 class="store-component__intro" th:text="${store.info}">쌈닭화이타가 제일 맛있음</h6>
+                <h6 class="store-component__intro" th:text="${store.info}">
+                    쌈닭화이타가 제일 맛있음
+                </h6>
             </div>
         </div>
         <div class="store-component__column">

@@ -24,6 +24,12 @@
   font-size: 30px;
   font-weight: 600;
 }
+.store-info__favorite__false {
+  color: black;
+}
+.store-info__favorite__true {
+  color: red;
+}
 
 .store-input {
   display: flex;

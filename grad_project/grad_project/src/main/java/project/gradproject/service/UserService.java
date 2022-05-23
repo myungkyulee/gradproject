@@ -3,10 +3,12 @@ package project.gradproject.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.gradproject.domain.Favorite;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.user.User;
 import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.domain.waiting.WaitingStatus;
+import project.gradproject.repository.FavoriteRepository;
 import project.gradproject.repository.StoreRepository;
 import project.gradproject.repository.UserRepository;
 
@@ -21,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
+    private final FavoriteRepository favoriteRepository;
 
     @Transactional
     public Long join(User user){
@@ -76,6 +79,27 @@ public class UserService {
         list.add(s);
         return list;
     }
+
+    @Transactional
+    public void favorite(Long storeId, Long userId){
+        Store store = storeRepository.findById(storeId);
+        User user = userRepository.findById(userId);
+        Favorite favorite = Favorite.createFavorite(store, user);
+        user.getFavorites().add(favorite);
+
+
+        favoriteRepository.save(favorite);
+
+    }
+
+    @Transactional
+    public void removeFavorite(User user, Favorite favorite){
+        favoriteRepository.remove(favorite);
+        user.getFavorites().remove(favorite);
+    }
+
+
+
 
     /*public List<Store> checkKeyword(String searchStr){
         List<String> keywords = splitKeyword(searchStr);

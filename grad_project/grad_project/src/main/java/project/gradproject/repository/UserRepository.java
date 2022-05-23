@@ -2,6 +2,7 @@ package project.gradproject.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import project.gradproject.domain.Favorite;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.user.User;
 
@@ -40,4 +41,8 @@ public class UserRepository {
                 .getResultList();
     }
 
+   /* public Favorite findUserFavorite(){
+        return em.createQuery("select f from Favorite f, User u", Favorite.class)
+                .getResultList();
+    }*/
 }

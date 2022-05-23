@@ -2,6 +2,7 @@ package project.gradproject.domain.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import project.gradproject.domain.Favorite;
 import project.gradproject.domain.waiting.Waiting;
 
 import javax.persistence.*;
@@ -22,6 +23,10 @@ public class User {
     // 로그인 아이디 패스워드
     private String loginId;
     private String loginPassword;
+
+
+    @OneToMany(mappedBy = "user")
+    private List<Favorite> Favorites = new ArrayList<>();  // 찜하기 리스트
 
     @OneToMany(mappedBy = "user")
     private List<Waiting> waitingList=new ArrayList<>();

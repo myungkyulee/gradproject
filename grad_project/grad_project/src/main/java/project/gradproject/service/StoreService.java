@@ -3,7 +3,9 @@ package project.gradproject.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.gradproject.domain.Favorite;
 import project.gradproject.domain.Keyword;
+import project.gradproject.domain.StoreDTO;
 import project.gradproject.domain.store.Address;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreKeyword;
@@ -14,7 +16,6 @@ import project.gradproject.repository.StoreRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly =true)
@@ -108,9 +109,43 @@ public class StoreService {
         Keyword keyword = keywordRepository.findById(keywordId);
 
         StoreKeyword storeKeyword=StoreKeyword.createStoreKeyword(keyword);
+
         store.getStoreKeywords().add(storeKeyword);
         storeKeyword.setStore(store);
+
         storeKeywordRepository.save(storeKeyword);
+    }
+
+    public StoreDTO setStoreDTO(Store store) {
+
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setName(store.getName());
+        storeDTO.setImagePath(store.getImagePath());
+        storeDTO.setTableCount(store.getTableCount());
+        storeDTO.setInfo(store.getInfo());
+        storeDTO.setRestTableCount(store.getRestTableCount());
+
+        Address address = store.getAddress();
+        String ad="";
+        if(address.getState()==null) {
+            ad = address.getCity() + " " + address.getTown()
+                    + " " + address.getStreet() + " " + address.getDetailAddress();
+        } else {
+            ad = address.getState() + " " + address.getCity() + " " + address.getTown()
+                    + " " + address.getStreet() + " " + address.getDetailAddress();
+        }
+        storeDTO.setAddress(ad);
+        return storeDTO;
+    }
+
+    public List<StoreDTO> setStoreDTO(List<Store> storeList){
+
+        List<StoreDTO> stores = new ArrayList<>();
+        for(Store store:storeList){
+            StoreDTO storeDTO = setStoreDTO(store);
+            stores.add(storeDTO);
+        }
+        return stores;
     }
 
 
@@ -126,10 +161,14 @@ public class StoreService {
                 break;
             }
         }
-
+        int count=0;
         if(check){
             for(int i = index; i< ad.length(); i++){
                 if(ad.charAt(i)==' ') {
+                    if(count==0 && ad.charAt(i-1)=='시') {
+                        count++;
+                        list.add(null);
+                    }
                     if(s=="") continue;
                     list.add(s);
                 }
@@ -153,18 +192,23 @@ public class StoreService {
         return storeRepository.findAllByString(keyword);
     }*/
 
-    public List<Store> findKeywordStores(String keyword) {
+    public List<Store> findKeywordStores(List<String> keywords) {
         List<Store> stores = findStores();
         System.out.println(stores.size());
         List<Store> storeList = new ArrayList<>();
+
         for(Store store:stores){
+            int count=0;
             List<StoreKeyword> storeKeywords = store.getStoreKeywords();
-            for(StoreKeyword storeKeyword:storeKeywords){
-                if(storeKeyword.getKeyword().getName().equals(keyword)){
-                    storeList.add(store);
-                    break;
+            for(String keyword:keywords) {
+                for (StoreKeyword storeKeyword : storeKeywords) {
+                    if (storeKeyword.getKeyword().getName().equals(keyword)) {
+                        count++;
+                        break;
+                    }
                 }
             }
+            if (count == keywords.size()) storeList.add(store);
         }
         return storeList;
     }
