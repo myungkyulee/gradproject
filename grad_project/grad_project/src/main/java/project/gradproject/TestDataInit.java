@@ -68,17 +68,18 @@ public class TestDataInit {
         user1.setName("이명규");
         user1.setLoginId("test");
         user1.setLoginPassword("test");
+        user1.setLocationName("위치를 설정해주세요");
 
         User user2=new User();
         user2.setName("변상욱");
-        user2.setLoginId("testUser2");
-        user2.setLoginPassword("testUser2!");
-
+        user2.setLoginId("test2");
+        user2.setLoginPassword("test2");
+        user1.setLocationName("위치를 설정해주세요");
         User user3=new User();
         user3.setName("안진수");
-        user3.setLoginId("testUser3");
-        user3.setLoginPassword("testUser3!");
-
+        user3.setLoginId("test3");
+        user3.setLoginPassword("test3");
+        user1.setLocationName("위치를 설정해주세요");
         // 키워드 저장
         Keyword keyword1 = new Keyword();
         keyword1.setName("망원동");
@@ -119,6 +120,9 @@ public class TestDataInit {
         storeService.join(store3);
 
         waitingService.waiting(user1.getId(),store1.getId(),2);
+        waitingService.waiting(user1.getId(),store2.getId(),1);
+        Long waiting = waitingService.waiting(user1.getId(), store3.getId(), 4);
+        waitingService.enterWaiting(waiting);
         waitingService.waiting(user2.getId(),store1.getId(),4);
         waitingService.waiting(user3.getId(),store2.getId(),4);
 

@@ -28,22 +28,7 @@ public class StoreController {
     private final StoreService storeService;
     private final WaitingService waitingService;
 
-   /* @GetMapping("/{storeId}")
-    public String storeHome(@PathVariable Long storeId, Model model){
-        Store store = storeService.findOne(storeId);
-        List<Waiting> waitings = store.getWaitingList();
-        List<Waiting> waitingList = new ArrayList<>();
-        for(int i=0;i<waitings.size();i++){
-            Waiting waiting = waitings.get(i);
-            if(waiting.getStatus()==WaitingStatus.WAIT){
-                waitingList.add(waiting);
-            }
-        }
-        store.setWaitingList(waitingList);
-
-        model.addAttribute("store", store);
-        return "store/storeHome";
-    }
+   /*
     @GetMapping
     public String storeHome1(@SessionAttribute(name="loginStoreId", required=true) Long storeId, Model model) {
 

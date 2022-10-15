@@ -1,0 +1,20 @@
+.location-bar {
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  width: 100%;
+}
+.location-bar__pin {
+  margin: 15px;
+  padding-left: 10px;
+}
+.location-bar__address {
+  flex: auto;
+  padding: 10px 0px;
+}
+.empty-location__bar {
+  margin: 50px;
+}

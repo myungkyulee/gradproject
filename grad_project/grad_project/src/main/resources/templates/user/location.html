@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
+    />
+    <title>간단한 지도 표시하기</title>
+    <script
+            type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=cmpkcbuzsd&submodules=geocoder"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<!-- 상단 -->
+
+<div class="location-top">
+    <div class="location-top__column">
+        <a th:href="@{/user}" href="userHome.html">
+            <i class="fa-solid fa-arrow-left fa-2x"></i>
+        </a>
+    </div>
+    <div class="location-top__column">주소검색</div>
+    <div class="location-top__column"></div>
+</div>
+
+<!-- 검색창-->
+<div class="location-search-form">
+    <input
+            id="address"
+            class="search-form__text"
+            type="text"
+            name="keyword"
+            placeholder="검색할 주소"
+    />
+    <button id="submit" type="submit" class="search-form__btn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</div>
+
+<!-- 지도 -->
+<div id="map" style="width: 100%; height: 80vh"></div>
+
+<!-- 하단 -->
+<!-- html form 은 post만 지원-->
+<div class="location-bottom-container">
+    <form class="location-form" action="/user/location" method="post">
+        <div><input
+                id="bottom-text" class="location-bottom__text"
+                type="text"
+                value="서울특별시 마포구 와우산로 94"
+                name="location"
+                th:value="${user.locationName}"
+                readonly
+        /></div>
+
+        <div> <input type="hidden" name="x" value=0 th:value="${user.locationX}"/>
+            <input type="hidden" name="y" value=0 th:value="${user.locationY}"/>
+            <input class="bottom-btn" type="submit" value="핀위치로 주소 설정" /></div>
+
+
+
+    </form>
+</div>
+
+
+
+</div>
+
+<!-- 지도 설정 스크립트  -->
+<!-- th:inline="javascript" thymeleaf 변수를 자바스크립트에서 쓰기위해-->
+<script>
+
+      var position = new naver.maps.LatLng(37.3595704, 127.105399);
+
+      var map = new naver.maps.Map("map", {
+        center: position,
+        zoom: 15,
+        mapTypeControl: true,
+      });
+      var marker = new naver.maps.Marker({
+    position: position,
+    map: map
+});
+
+      map.setCursor("pointer");
+
+      function searchCoordinateToAddress(latlng) {
+
+
+        naver.maps.Service.reverseGeocode(
+          {
+            coords: latlng,
+            orders: [
+              naver.maps.Service.OrderType.ADDR,
+              naver.maps.Service.OrderType.ROAD_ADDR,
+            ].join(","),
+          },
+          function (status, response) {
+            if (status === naver.maps.Service.Status.ERROR) {
+              if (!latlng) {
+                return alert("ReverseGeocode Error, Please check latlng");
+              }
+              if (latlng.toString) {
+                return alert(
+                  "ReverseGeocode Error, latlng:" + latlng.toString()
+                );
+              }
+              if (latlng.x && latlng.y) {
+                return alert(
+                  "ReverseGeocode Error, x:" + latlng.x + ", y:" + latlng.y
+                );
+              }
+              return alert("ReverseGeocode Error, Please check latlng");
+            }
+
+            var address = response.v2.address,
+              htmlAddresses = [];
+
+            if (address.jibunAddress !== "") {
+              htmlAddresses.push("[지번 주소] " + address.jibunAddress);
+            }
+
+            if (address.roadAddress !== "") {
+              htmlAddresses.push("[도로명 주소] " + address.roadAddress);
+            }
+
+            var a = document.getElementsByClassName("location-bottom__text")[0];
+
+            if (address.roadAddress !== "") {
+              a.value = address.roadAddress;
+            }
+            if (address.jibunAddress !== "") {
+              a.value = address.jibunAddress;
+            }
+
+            var x = document.getElementsByName("x")[0];
+            var y = document.getElementsByName("y")[0];
+            x.value = latlng.x;
+            y.value = latlng.y;
+
+
+          }
+        );
+      }
+
+      function searchAddressToCoordinate(address) {
+        naver.maps.Service.geocode(
+          {
+            query: address,
+          },
+          function (status, response) {
+            if (status === naver.maps.Service.Status.ERROR) {
+              if (!address) {
+                return alert("Geocode Error, Please check address");
+              }
+              return alert("Geocode Error, address:" + address);
+            }
+
+            if (response.v2.meta.totalCount === 0) {
+              return alert("No result.");
+            }
+
+            var htmlAddresses = [],
+              item = response.v2.addresses[0],
+              point = new naver.maps.Point(item.x, item.y);
+
+            if (item.roadAddress) {
+              htmlAddresses.push("[도로명 주소] " + item.roadAddress);
+            }
+
+            if (item.jibunAddress) {
+              htmlAddresses.push("[지번 주소] " + item.jibunAddress);
+            }
+
+            if (item.englishAddress) {
+              htmlAddresses.push("[영문명 주소] " + item.englishAddress);
+            }
+            var a = document.getElementsByClassName("location-bottom__text")[0];
+
+            if (item.roadAddress) {
+              a.value = item.roadAddress;
+            }
+
+            if (item.jibunAddress) {
+              a.value = item.jibunAddress;
+            }
+
+            var x = document.getElementsByName("x")[0];
+            var y = document.getElementsByName("y")[0];
+            x.value = item.x;
+            y.value = item.y;
+
+            marker.setPosition(point);
+            map.setCenter(point);
+          }
+        );
+      }
+
+      function initGeocoder() {
+        map.addListener("click", function (e) {
+          marker.setPosition(e.coord);
+          searchCoordinateToAddress(e.coord);
+        });
+
+        $("#address").on("keydown", function (e) {
+          var keyCode = e.which;
+
+          if (keyCode === 13) {
+            // Enter Key
+            searchAddressToCoordinate($("#address").val());
+          }
+        });
+
+        $("#submit").on("click", function (e) {
+          e.preventDefault();
+
+          searchAddressToCoordinate($("#address").val());
+        });
+        if (
+          document.getElementsByClassName("location-bottom__text")[0].value ===
+          "위치를 설정해주세요"
+        )
+          searchAddressToCoordinate("연희동");
+        else
+          searchAddressToCoordinate(
+            document.getElementsByClassName("location-bottom__text")[0].value
+          );
+      }
+
+      naver.maps.onJSContentLoaded = initGeocoder;
+    </script>
+<script
+        src="https://kit.fontawesome.com/ffa043e739.js"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>

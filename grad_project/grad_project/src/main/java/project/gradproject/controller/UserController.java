@@ -66,6 +66,8 @@ public class UserController {
         Store store = storeService.findOneByName(name);
         List<Favorite> favorites = user.getFavorites();
         Boolean check = false;
+
+        // 다른방식으로 바꾸자
         for (Favorite f : favorites) {
             if (f.getStore() == store) {
                 check = true;
@@ -91,7 +93,7 @@ public class UserController {
 
         System.out.println("name = " + name);
         System.out.println("peopleNum = " + peopleNum);
-
+        // 사용자 id를 session에서 꺼냄 (로그인유지)
         HttpSession session = request.getSession(false);
         if (session == null) return "redirect:/";
         Long loginUserId = (Long) session.getAttribute("loginUserId");
@@ -199,4 +201,114 @@ public class UserController {
         model.addAttribute("stores",stores);
         return "user/favorite";
     }
+
+    @GetMapping("/info")
+    public String info(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession();
+
+        if(session==null) return "redirect:/";
+        Long userId = (Long)session.getAttribute("loginUserId");
+        if(userId==null) return "redirect:/";
+
+        User user = userService.findOne(userId);
+
+        model.addAttribute("user",user);
+
+
+        return "user/info";
+    }
+
+    @GetMapping("/currentWaitingList")
+    public String currentList(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession();
+
+        if(session==null) return "redirect:/";
+        Long userId = (Long)session.getAttribute("loginUserId");
+        if(userId==null) return "redirect:/";
+
+        User user = userService.findOne(userId);
+
+        List<Waiting> waitingList = user.getWaitingList();
+        List<Waiting> currentWaitingList = getCurrentWaitingList(waitingList);
+
+        model.addAttribute("waitings",currentWaitingList);
+
+        return "user/currentWaitingList";
+    }
+    @GetMapping("/enteredWaitingList")
+    public String enteredList(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession();
+
+        if(session==null) return "redirect:/";
+        Long userId = (Long)session.getAttribute("loginUserId");
+        if(userId==null) return "redirect:/";
+
+        User user = userService.findOne(userId);
+
+        List<Waiting> waitingList = user.getWaitingList();
+
+        List<Waiting> enteredWaitingList = getEnteredWaitingList(waitingList);
+
+        model.addAttribute("waitings",enteredWaitingList);
+
+        return "user/currentWaitingList";
+    }
+
+    @GetMapping("/location")
+    public String location(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession();
+
+        if(session==null) return "redirect:/";
+        Long userId = (Long)session.getAttribute("loginUserId");
+        if(userId==null) return "redirect:/";
+
+        User user = userService.findOne(userId);
+        model.addAttribute("user",user);
+        return "user/location";
+    }
+
+    @PostMapping("/location")
+    public String locationUpdate(HttpServletRequest request,
+                            @RequestParam("location") String location,
+                                 @RequestParam("x") Double x,
+                                 @RequestParam("y") Double y){
+        HttpSession session = request.getSession();
+        System.out.println("OK");
+        System.out.println("OK");
+        System.out.println(location);
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println("OK");
+        if(session==null) return "redirect:/";
+        Long userId = (Long)session.getAttribute("loginUserId");
+        if(userId==null) return "redirect:/";
+
+        User user = userService.findOne(userId);
+
+        userService.setLocation(user, location,x,y);
+
+        return "redirect:/user";
+    }
+
+    private List<Waiting> getCurrentWaitingList(List<Waiting> waitingList){
+        List<Waiting> current = new ArrayList<Waiting>();
+
+        for(Waiting w:waitingList){
+            if(w.getStatus()== WaitingStatus.WAIT) current.add(w);
+        }
+
+        return current;
+    }
+    private List<Waiting> getEnteredWaitingList(List<Waiting> waitingList){
+        List<Waiting> entered = new ArrayList<Waiting>();
+
+        for(Waiting w:waitingList){
+            if(w.getStatus()== WaitingStatus.ENTER) entered.add(w);
+        }
+
+        return entered;
+    }
+
+
+
 }

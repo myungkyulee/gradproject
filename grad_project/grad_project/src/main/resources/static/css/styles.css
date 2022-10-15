@@ -4,8 +4,13 @@
 /*component*/
 @import "components/nav-bar.css";
 @import "components/store-component.css";
+@import "components/menu-component.css";
+@import "components/top-bar.css";
 /*screen*/
+@import "screens/search.css";
 @import "screens/login.css";
 @import "screens/userHome.css";
 @import "screens/storeForm.css";
-@import "screens/search.css";
+@import "screens/info.css";
+@import "screens/waitingList.css";
+@import "screens/location.css";

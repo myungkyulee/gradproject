@@ -5,30 +5,27 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Home</title>
+    <title>Document</title>
 </head>
 <body>
-<form class="search-form" action="" method="get">
-    <input
-            class="search-form__text"
-            type="text"
-            name="keyword"
-            placeholder="지역, 매장명, 카테고리"
-    />
-    <button type="submit" class="search-form__btn">
-        <i class="fa-solid fa-magnifying-glass"></i>
-    </button>
-</form>
+<!--
+      유저 이름
+  -->
+<div class="bar">
+    <a href="userInfo.html" class="user-info">
+        <h2 class="user-name" th:text="${user.name}">유저이름</h2>
+    </a>
+</div>
 
-<div>최근 검색어</div>
-
-
-
-
-
-
-
-
+<div class="bar">
+    <a
+            class="user-bar-component"
+            href="currentWaitingList.html"
+            th:href="@{currentWaitingList}"
+    >
+        <div class="user-bar-text">대기 내역</div>
+    </a>
+</div>
 
 <nav class="nav">
     <ul class="nav__list">

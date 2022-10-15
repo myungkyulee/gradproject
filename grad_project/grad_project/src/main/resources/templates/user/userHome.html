@@ -8,11 +8,22 @@
     <title>User Home</title>
 </head>
 <body>
-<header class="top-bar">
-    <div class="top-bar__location" th:text="${user.name}">내위치</div>
+<header class="location-bar">
+    <div class="location-bar__pin">
+        <i class="fa-solid fa-location-dot"></i>
+    </div>
+
+    <a
+            class="location-bar__address"
+            href="location.html"
+            th:href="@{user/location}"
+            th:text="${user.locationName}"
+    >서울특별시 마포구 와우산로 94</a
+    >
 </header>
 
-<div></div>
+<div class="empty-location__bar"></div>
+
 
 <div class="user-main-screen" th:each="store:${stores}">
     <a
@@ -55,6 +66,7 @@
     </a>
 </div>
 
+<div class="empty-nav"></div>
 <nav class="nav">
     <ul class="nav__list">
         <li class="nav__btn">
@@ -73,7 +85,7 @@
             </a>
         </li>
         <li class="nav__btn">
-            <a class="nav__link" href="#">
+            <a class="nav__link" href="info.html" th:href="@{/user/info}">
                 <i class="fa-solid fa-user fa-2x"></i>
             </a>
         </li>

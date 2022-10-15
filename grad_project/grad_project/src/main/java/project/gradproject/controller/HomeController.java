@@ -131,11 +131,10 @@ public class HomeController {
     @PostMapping("/store/logout")
     public String logoutStore(HttpServletRequest request){
         HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
         Long storeId = (Long) session.getAttribute("loginStoreId");
         storeService.closeStore(storeId);
-        if(session!=null) {
-            session.invalidate();
-        }
+        session.invalidate();
         return "redirect:/";
     }
 }

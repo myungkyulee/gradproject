@@ -7,6 +7,8 @@ import project.gradproject.domain.user.User;
 
 import javax.persistence.*;
 
+import java.sql.Timestamp;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -28,6 +30,10 @@ public class Waiting {
 
     private int peopleNum;
 
+    private Timestamp createdAt;
+    private Timestamp enteredAt;
+
+
     private WaitingStatus status;
 
     public void setUser(User user){
@@ -42,6 +48,7 @@ public class Waiting {
         waiting.setStore(store);
         waiting.setPeopleNum(peopleNum);
         waiting.setStatus(WaitingStatus.WAIT);
+        waiting.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return waiting;
     }
     public void setStore(Store store){
@@ -49,6 +56,7 @@ public class Waiting {
         store.getWaitingList().add(this);
     }
     public void enter() {
+        this.setEnteredAt(new Timestamp(System.currentTimeMillis()));
         this.setStatus(WaitingStatus.ENTER);
     }
 

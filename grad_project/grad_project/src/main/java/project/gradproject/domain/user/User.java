@@ -23,7 +23,9 @@ public class User {
     // 로그인 아이디 패스워드
     private String loginId;
     private String loginPassword;
-
+    private String locationName;
+    private Double locationX;
+    private Double locationY;
 
     @OneToMany(mappedBy = "user")
     private List<Favorite> Favorites = new ArrayList<>();  // 찜하기 리스트

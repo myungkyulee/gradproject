@@ -39,21 +39,14 @@ public class Store  {
 
     private String imagePath; // 이미지 경로
 
+    @Enumerated(EnumType.STRING)
+    private StoreStatus storeStatus;  // 매장 오픈 여부
 
     @OneToMany(mappedBy = "store")
     private List<StoreKeyword> storeKeywords = new ArrayList<>();   // 검색을 위한 키워드 리스트
 
-
     @OneToMany(mappedBy = "store")
     private List<Waiting> waitingList = new ArrayList<>();  // 대기 리스트
-
-
-
-
-
-    @Enumerated(EnumType.STRING)
-    private StoreStatus storeStatus;  // 매장 오픈 여부
-
 
     @Override
     public String toString() {

@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #f9f9fa;
+  background-color: white;
   padding: 20px 50px;
 
   box-sizing: border-box;
@@ -15,4 +15,7 @@
 .nav__link {
   position: relative;
   color: #000000;
+}
+.empty-nav {
+  margin: 71px;
 }

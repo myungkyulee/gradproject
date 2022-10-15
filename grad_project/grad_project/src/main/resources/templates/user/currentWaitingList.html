@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Home</title>
+</head>
+<body>
+<div class="top-bar">
+    <div class="back">
+        <a th:href="@{/user/info}" href="info.html">
+            <i class="fa-solid fa-arrow-left fa-2x"></i>
+        </a>
+    </div>
+    <div class="waitingList">대기 리스트</div>
+</div>
+
+<div class="both-list">
+    <div class="waitingList-current">
+        <a href="currentWaitingList.html" th:href="@{currentWaitingList}"
+        >대기</a
+        >
+    </div>
+
+    <div class="waitingList-entered">
+        <a href="enteredWaitingList.html" th:href="@{enteredWaitingList}"
+        >입장</a
+        >
+    </div>
+</div>
+
+<div class="user-main-screen" th:each="waiting:${waitings}">
+    <div class="store-component">
+        <div class="store-component__column">
+            <img
+                    src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTExMDZfNjQg%2FMDAxNjM2MTMwMzg2NjE3.7ux8pWAUm2OKjKHASb4JoZPaxlQW2WL0yHWXwKR0N4og.wgSkaPnqjjdKE4tusCCZnGk2VlcJLRcGjCxtz4DFaF0g.JPEG.zeroy94%2F20211105%25A3%25DF191021.jpg&type=sc960_832"
+                    th:src="${waiting.store.imagePath}"
+                    class="store-component__picture"
+            />
+            <div class="store-component__text">
+                <h4 class="store-component__name" th:text="${waiting.store.name}">
+                    누구나홀딱반한닭
+                </h4>
+            </div>
+        </div>
+        <div class="store-component__column">
+            <div class="store-component__text">
+                <h4 class="store-component__name">대기 시간</h4>
+                <!-- th:text="#"-->
+                <h6 class="store-component__intro" th:text="${waiting.createdAt}">
+                    9월 16일 11시 30분
+                </h6>
+            </div>
+        </div>
+        <div class="store-component__column">
+            <div class="store-component__text">
+                <h4 class="store-component__name">입장 시간</h4>
+                <!-- th:text="#"-->
+                <h6 class="store-component__intro" th:text="${waiting.enteredAt}">
+                    9월 16일 12시 0분
+                </h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script
+        src="https://kit.fontawesome.com/ffa043e739.js"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>

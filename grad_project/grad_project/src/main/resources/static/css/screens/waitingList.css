@@ -1,0 +1,31 @@
+.top-bar {
+  display: flex;
+}
+.back {
+  padding: 15px;
+}
+.waitingList {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 600;
+}
+.both-list {
+  display: flex;
+  justify-content: space-between;
+}
+.waitingList-current {
+  flex-basis: 100%;
+
+  margin: 10px;
+}
+.waitingList-current__a {
+}
+.waitingList-entered {
+  flex-basis: 100%;
+  margin: 10px;
+}
+.waitingList-entered__a {
+  justify-content: center;
+}

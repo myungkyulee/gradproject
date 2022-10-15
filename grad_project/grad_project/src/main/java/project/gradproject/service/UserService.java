@@ -91,6 +91,17 @@ public class UserService {
         favoriteRepository.save(favorite);
 
     }
+    @Transactional
+    public void setLocation(User user, String s, Double x, Double y){
+        user.setLocationName(s);
+        user.setLocationX(x);
+        user.setLocationY(y);
+    }
+    @Transactional
+    public void setLocation(User user, String s){
+        user.setLocationName(s);
+    }
+
 
     @Transactional
     public void removeFavorite(User user, Favorite favorite){
