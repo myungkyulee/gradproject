@@ -20,7 +20,7 @@
         <h2>회원 가입</h2>
       </div>
       <h4 class="mb-3">회원 정보 입력</h4>
-      <form action="" th:action th:object="${member}" method="post">
+      <form action="" th:action="@{/member/addStore}" th:object="${member}" method="post">
         <div th:if="${#fields.hasGlobalErrors()}">
           <p
             class="field-error"
@@ -68,11 +68,17 @@
           <input
             type="text"
             id="address"
-            th:field="*{address}"
+            th:field="*{locationName}"
             class="form-control"
             th:errorclass="field-error"
+            readonly
           />
-          <div class="field-error" th:errors="*{address}" />
+          <input type="hidden" name="x" th:field="*{locationX}" value=0 th:value="*{locationX}"/>
+          <input type="hidden" name="y" th:field="*{locationY}" value=0 th:value="*{locationY}"/>
+          <div class="field-error" th:errors="*{locationName}" />
+          <a href="" th:href="@{/member/addStore/location}" >주소입력</a>
+
+
         </div>
         <div>
           <label for="table">테이블 개수</label>

@@ -39,6 +39,12 @@ public class Store  {
 
     private String imagePath; // 이미지 경로
 
+    // 주소, 위치
+    private String locationName;
+    private Double locationX;
+    private Double locationY;
+
+
     @Enumerated(EnumType.STRING)
     private StoreStatus storeStatus;  // 매장 오픈 여부
 

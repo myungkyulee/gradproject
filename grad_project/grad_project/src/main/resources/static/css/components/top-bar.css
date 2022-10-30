@@ -18,3 +18,9 @@
 .empty-location__bar {
   margin: 50px;
 }
+.subtitle {
+  margin: 20px;
+  padding-top: 10px;
+  font-size: 30px;
+  font-weight: 600;
+}

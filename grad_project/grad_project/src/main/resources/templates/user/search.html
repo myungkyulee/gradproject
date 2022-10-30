@@ -24,7 +24,7 @@
     <a
             class="store-component"
             href="storeForm.html"
-            th:href="@{{name}(name=${store.name})}"
+            th:href="@{user/{name}(name=${store.name})}"
     >
         <div class="store-component__column">
             <img
@@ -36,20 +36,10 @@
                 <h4 class="store-component__name" th:text="${store.name}">
                     누구나홀딱반한닭
                 </h4>
-                <!-- th:text="#"-->
-                <h6 class="store-component__intro" th:text="${store.info}">쌈닭화이타가 제일 맛있음</h6>
-            </div>
-        </div>
-        <div class="store-component__column">
-            <div class="store-component__text">
-                <h3 class="store-component__address" th:text="${store.address}">
+
+                <h6 class="store-component__address" th:text="${store.address}">
                     홍대길거리
-                </h3>
-            </div>
-        </div>
-        <div class="store-component__column">
-            <div class="store-component__text">
-                <h6 class="store-component__restTable__title">남은자리수</h6>
+                </h6>
                 <h6
                         class="store-component__restTable"
                         th:text="${store.restTableCount}"

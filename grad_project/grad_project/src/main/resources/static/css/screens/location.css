@@ -68,6 +68,8 @@
   width: 100%;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
-#map{
-
+.location-GPS__btn {
+  cursor: pointer;
+  background-color: white;
+  border: none;
 }

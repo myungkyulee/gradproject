@@ -16,8 +16,6 @@ public class StoreJoinForm {
     private String loginId;
     @NotEmpty
     private String password;
-    @NotEmpty
-    private String address;
 
     @NotNull(message = "비어 있을 수 없습니다")
     private Integer tableCount;
@@ -25,4 +23,10 @@ public class StoreJoinForm {
     private String info;
     @NotEmpty
     private String imagePath;
+    @NotEmpty(message = "비어 있을 수 없습니다")
+    private String locationName;
+
+    private Double locationX;
+
+    private Double locationY;
 }

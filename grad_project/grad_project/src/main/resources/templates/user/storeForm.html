@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script
+            type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=cmpkcbuzsd&submodules=geocoder"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 </head>
 <body>
 <!-- 왼쪽방향 화살표 넣기 -->
@@ -72,9 +78,21 @@
             />
         </div>
 
-        <input class="store-input__btn" type="submit" value="waiting" />
+        <input th:if="${storeOpenCheck}==true" class="store-input__btn" type="submit" value="waiting" />
+        <!--가게 오픈 안했을 때 -->
+        <input th:if="${storeOpenCheck}==false" style="background: #F0F0F0;"disabled class="store-input__btn" type="submit" value="waiting" />
     </form>
+    <!--type="hidden"-->
+    <input type="hidden" name="x" th:value="${store.locationX}" />
+    <input type="hidden" name="y" th:value="${store.locationY}" />
 </main>
+
+<!-- 가게에 대한 -->
+<a href="nmap://actionPath?parameter=value&appname={https://localhost:8080/}" th:href="@{favorite/{name}(name=${store.name})}"></a>
+
+<!-- 지도 -->
+<div id="map" readonly style="width: 100%; height: 80vh"></div>
+
 
 <main class="user-main-screen">
     <a
@@ -97,7 +115,41 @@
         </div>
     </a>
 </main>
+<script>
+    var map = new naver.maps.Map("map", {
+        center: new naver.maps.LatLng(37.5672271, 126.9290697),
+        zoom: 18,
+        mapTypeControl: true,
+      });
 
+      var marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(37.5672271, 126.9290697),
+        map: map,
+      });
+/*
+window.addEventListener('DOMContentLoaded', function(){
+    resize();
+    window.addEventListener('resize', resize);
+});
+function resize(){
+    var mapWidth = window.innerWidth;
+    var mapHeight = window.innerHeight  - document.getElementByClassName('location-top').offsetHeight
+                                        - document.getElementByClassName('location-bottom-container').offsetHeight;
+    var Size = new naver.maps.Size(mapWidth, mapHeight);
+    map.setSize(Size);
+}
+*/
+
+      function initGeocoder() {
+        var x = parseFloat(document.getElementsByName("x")[0].value);
+        var y = parseFloat(document.getElementsByName("y")[0].value);
+
+        point = new naver.maps.Point(x, y);
+        map.setCenter(point);
+        marker.setPosition(point);
+      }
+      naver.maps.onJSContentLoaded = initGeocoder;
+</script>
 <script
         src="https://kit.fontawesome.com/ffa043e739.js"
         crossorigin="anonymous"

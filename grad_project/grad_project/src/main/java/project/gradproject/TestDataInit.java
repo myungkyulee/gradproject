@@ -33,7 +33,10 @@ public class TestDataInit {
         store1.setName("GAMARO");
         store1.setTableCount(10);
         store1.setRestTableCount(10);
-        Address address = storeService.splitAddress("서울시 마포구 대흥동 대흥역 1분거리");
+        store1.setLocationX(126.9313759);
+        store1.setLocationY(37.5483009);
+        store1.setLocationName("서울특별시 마포구 창전동 444 서강쌍용예가");
+        Address address = storeService.splitAddress("서울특별시 마포구 창전동 444 서강쌍용예가");
         store1.setAddress(address);
         store1.setInfo("대흥역 가마로강정인데 가마로는 원래 맛있어");
         store1.setStoreStatus(StoreStatus.CLOSED);
@@ -45,7 +48,11 @@ public class TestDataInit {
         store2.setName("월순");
         store2.setTableCount(20);
         store2.setRestTableCount(20);
-        Address address1 = storeService.splitAddress("서울시 마포구 망원동 맛있어요");
+        store2.setLocationX(126.9290697);
+        store2.setLocationY(37.5672271);
+        store2.setLocationName("서울 서대문구 연희맛로 17-14 1층");
+
+        Address address1 = storeService.splitAddress("서울특별시 서대문구 연희맛로 17-14 1층");
         store2.setAddress(address1);
         store2.setInfo("동태찜 전문점인데 아구찜이 너무 맛있어");
         store2.setStoreStatus(StoreStatus.CLOSED);
@@ -57,7 +64,10 @@ public class TestDataInit {
         store3.setName("간판없는가게");
         store3.setTableCount(20);
         store3.setRestTableCount(20);
-        Address address2 = storeService.splitAddress("서울시 종로구 익선동");
+        store3.setLocationX(126.9902802);
+        store3.setLocationY(37.5738066);
+        store3.setLocationName("서울특별시 종로구 익선동 166-18");
+        Address address2 = storeService.splitAddress("서울특별시 종로구 익선동 166-18");
         store3.setAddress(address2);
         store3.setInfo("파스타 맛있어 진심");
         store3.setStoreStatus(StoreStatus.CLOSED);

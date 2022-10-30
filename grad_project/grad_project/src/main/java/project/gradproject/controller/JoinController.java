@@ -3,12 +3,10 @@ package project.gradproject.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import project.gradproject.domain.StoreJoinForm;
 import project.gradproject.domain.UserJoinForm;
 import project.gradproject.domain.store.Address;
@@ -18,6 +16,8 @@ import project.gradproject.domain.user.User;
 import project.gradproject.service.StoreService;
 import project.gradproject.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +38,8 @@ public class JoinController {
 
     @GetMapping("/addStore")
     public String addStoreForm(@ModelAttribute("member") StoreJoinForm store){
+
+
         return "join/addStoreForm";
     }
     @PostMapping("/addStore")
@@ -50,14 +52,17 @@ public class JoinController {
         }*/
 
 
-
-        String ad = storeForm.getAddress();
+        String ad = storeForm.getLocationName();
 
         Address address = storeService.splitAddress(ad);
 
 
 
         Store store = new Store();
+        store.setAddress(address);
+        store.setLocationName(ad);
+        store.setLocationX(storeForm.getLocationX());
+        store.setLocationY(storeForm.getLocationY());
         store.setName(storeForm.getName());
         store.setLoginId(storeForm.getLoginId());
         store.setLoginPassword(storeForm.getPassword());
@@ -72,7 +77,33 @@ public class JoinController {
 
         return "redirect:/";
     }
+    @GetMapping("/addStore/location")
+    public String storeLocation(@ModelAttribute("store") StoreJoinForm storeJoinForm, Model model){
 
+        if(storeJoinForm.getLocationName()==null) storeJoinForm.setLocationName("위치를 설정해주세요");
+        model.addAttribute("user", storeJoinForm);
+        return "user/location";
+    }
+
+
+    @PostMapping("/addStore/location")
+    public String locationUpdate(@RequestParam("location") String location,
+                                 @RequestParam("x") Double x,
+                                 @RequestParam("y") Double y,
+                                 Model model){
+
+        System.out.println("OK");
+        System.out.println(location);
+        System.out.println(x);
+        System.out.println(y);
+
+        StoreJoinForm storeJoinForm = new StoreJoinForm();
+        storeJoinForm.setLocationName(location);
+        storeJoinForm.setLocationX(x);
+        storeJoinForm.setLocationY(y);
+        model.addAttribute("member", storeJoinForm);
+        return "join/addStoreForm";
+    }
 
 
     @GetMapping("/addUser")
@@ -80,7 +111,7 @@ public class JoinController {
         return "join/addUserForm";
     }
     @PostMapping("/addUser")
-    public String saveUser(@Validated @ModelAttribute("member") UserJoinForm userForm, BindingResult result) {
+    public String saveUser(@ModelAttribute("member") UserJoinForm userForm, BindingResult result) {
 
         if (result.hasErrors()) {
             return "join/addUserForm";

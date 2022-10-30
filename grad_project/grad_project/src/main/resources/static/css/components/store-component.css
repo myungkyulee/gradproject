@@ -1,11 +1,13 @@
 .store-component {
   justify-content: space-between;
+  border: none;
 }
 
 .store-component,
 .store-component__column:first-child {
   display: flex;
   align-items: center;
+  border: none;
 }
 
 .store-component__picture {
@@ -13,29 +15,26 @@
   height: 70px;
   border-radius: 25px;
   margin-right: 20px;
+  border: none;
 }
 
 .store-component__name {
   font-weight: 600;
   font-size: 22px;
+  margin-bottom: 15px;
 }
 
-.store-component__intro {
-  margin-top: 10px;
+.store-component__address {
+  margin: 5px 0px;
   font-size: 17px;
   color: rgba(0, 0, 0, 0.5);
 }
-.store-component__restTable__title {
-  padding-right: 10px;
-}
-
-.store-component__text:first-child {
-  display: flex;
+.store-component__restTable {
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .user-main-screen {
   padding: 10px var(--horizontal-space);
-
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border: none;
+  background-color: white;
 }

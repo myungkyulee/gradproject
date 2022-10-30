@@ -23,6 +23,8 @@ public class User {
     // 로그인 아이디 패스워드
     private String loginId;
     private String loginPassword;
+
+    // 주소, 위치
     private String locationName;
     private Double locationX;
     private Double locationY;

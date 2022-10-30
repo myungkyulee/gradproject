@@ -23,4 +23,10 @@ public class StoreDTO {
     private String info;
     @NotEmpty
     private String imagePath;
+
+    // 주소, 위치
+    private String locationName;
+    private Double locationX;
+    private Double locationY;
+    private Double dist;
 }

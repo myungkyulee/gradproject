@@ -13,6 +13,7 @@ import project.gradproject.repository.StoreRepository;
 import project.gradproject.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -111,6 +112,68 @@ public class UserService {
 
 
 
+    // 모든 Store User와의 절대 거리가 짧은 순으로 정렬해서 리턴
+    public List<Store> sortByDistance(User user){
+
+        Double x = user.getLocationX();
+        Double y = user.getLocationY();
+        List<Store> stores = storeRepository.findAll();
+
+        class StoreDist implements Comparable<StoreDist>{
+            Double dist;
+            Store store;
+
+            public Store getStore() {
+                return this.store;
+            }
+            public void setStore(Store store){
+                this.store=store;
+            }
+            public void setDist(Double dist){
+                this.dist=dist;
+            }
+
+            @Override
+            public int compareTo(StoreDist o) {
+                if(this.dist<o.dist){
+                    return 1;
+                }
+                return -1;
+            }
+        }
+        ArrayList<StoreDist> storeDists = new ArrayList<StoreDist>();
+
+        for(int i=0;i<stores.size();i++){
+            Store store = stores.get(i);
+            Double storeX = store.getLocationX();
+            Double storeY = store.getLocationY();
+
+            Double xDist = Math.abs(storeX - x);
+            Double yDist = Math.abs(storeY - y);
+
+            Double dist=getDistance(x,y,storeX,storeY);
+            StoreDist storeDist = new StoreDist();
+            storeDist.setDist(dist);
+            storeDist.setStore(store);
+            storeDists.add(storeDist);
+        }
+        Collections.sort(storeDists, Collections.reverseOrder());
+
+        List<Store> sortedStore = new ArrayList<Store>();
+        for(int i=0;i<storeDists.size();i++){
+            sortedStore.add(storeDists.get(i).getStore());
+        }
+        return sortedStore;
+    }
+    public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(dLat/2)* Math.sin(dLat/2)+ Math.cos(Math.toRadians(lat1))* Math.cos(Math.toRadians(lat2))* Math.sin(dLon/2)* Math.sin(dLon/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d =6371* c * 1000;    // Distance in m
+        return d;
+    }
 
     /*public List<Store> checkKeyword(String searchStr){
         List<String> keywords = splitKeyword(searchStr);

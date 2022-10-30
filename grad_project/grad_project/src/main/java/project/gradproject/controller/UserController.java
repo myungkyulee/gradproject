@@ -10,9 +10,11 @@ import project.gradproject.domain.Favorite;
 import project.gradproject.domain.StoreDTO;
 import project.gradproject.domain.store.Address;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.store.StoreDist;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
 import project.gradproject.domain.waiting.Waiting;
+import project.gradproject.domain.waiting.WaitingDTO;
 import project.gradproject.domain.waiting.WaitingStatus;
 import project.gradproject.service.KeywordService;
 import project.gradproject.service.StoreService;
@@ -21,7 +23,10 @@ import project.gradproject.service.WaitingService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Array;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -43,11 +48,18 @@ public class UserController {
         Long loginUserId = (Long) session.getAttribute("loginUserId");
         if (loginUserId == null) return "redirect:/";
 
+
+        List<StoreDTO> stores;
         User user = userService.findOne(loginUserId);
+        if(user.getLocationX()==null || user.getLocationY()==null){
+            List<Store> stores1 = storeService.findStores();
+            stores = storeService.setStoreDTO(stores1);
+        }
+        else{
+            List<Store> storeList = userService.sortByDistance(user);
+            stores = storeService.setStoreDTO(storeList);
+        }
 
-        List<Store> storeList = storeService.findStores();
-
-        List<StoreDTO> stores = storeService.setStoreDTO(storeList);
 
         model.addAttribute("stores", stores);
         model.addAttribute("user", user);
@@ -67,18 +79,21 @@ public class UserController {
         List<Favorite> favorites = user.getFavorites();
         Boolean check = false;
 
-        // 다른방식으로 바꾸자
+
         for (Favorite f : favorites) {
             if (f.getStore() == store) {
                 check = true;
                 break;
             }
         }
-
+        Boolean storeOpenCheck=false;
+        if(store.getStoreStatus()==StoreStatus.OPEN) storeOpenCheck=true;
 
         StoreDTO storeDTO = storeService.setStoreDTO(store);
-
-
+        System.out.println(storeDTO.getLocationX());
+        System.out.println(storeDTO.getLocationY());
+        System.out.println(storeDTO.getLocationName());
+        model.addAttribute("storeOpenCheck", storeOpenCheck);
         model.addAttribute("store", storeDTO);
         model.addAttribute("check", check);
         return "user/storeForm";
@@ -229,7 +244,7 @@ public class UserController {
         User user = userService.findOne(userId);
 
         List<Waiting> waitingList = user.getWaitingList();
-        List<Waiting> currentWaitingList = getCurrentWaitingList(waitingList);
+        List<WaitingDTO> currentWaitingList = getCurrentWaitingList(waitingList);
 
         model.addAttribute("waitings",currentWaitingList);
 
@@ -247,11 +262,11 @@ public class UserController {
 
         List<Waiting> waitingList = user.getWaitingList();
 
-        List<Waiting> enteredWaitingList = getEnteredWaitingList(waitingList);
+        List<WaitingDTO> enteredWaitingList = getEnteredWaitingList(waitingList);
 
         model.addAttribute("waitings",enteredWaitingList);
 
-        return "user/currentWaitingList";
+        return "user/enteredWaitingList";
     }
 
     @GetMapping("/location")
@@ -290,20 +305,58 @@ public class UserController {
         return "redirect:/user";
     }
 
-    private List<Waiting> getCurrentWaitingList(List<Waiting> waitingList){
-        List<Waiting> current = new ArrayList<Waiting>();
+    private List<WaitingDTO> getCurrentWaitingList(List<Waiting> waitingList){
+        List<WaitingDTO> current = new ArrayList<>();
 
         for(Waiting w:waitingList){
-            if(w.getStatus()== WaitingStatus.WAIT) current.add(w);
+            if(w.getStatus()== WaitingStatus.WAIT) {
+                WaitingDTO waitingDTO= new WaitingDTO();
+                waitingDTO.setWaiting(w);
+                Timestamp createdAt = w.getCreatedAt();
+                String s = createdAt.toString();
+                ArrayList<String> list = new ArrayList<>();
+                String str="";
+                for(int i=0;i<s.length();i++){
+                    char c = s.charAt(i);
+                    if(c=='-' || c==' ' || c==':') {
+                        list.add(str);
+                        str="";
+                    }
+                    else str+=c;
+                }
+                String result="";
+                result+=list.get(1)+"/"+list.get(2)+" "+list.get(3)+"시 "+list.get(4)+"분";
+                waitingDTO.setTime(result);
+                current.add(waitingDTO);
+            }
         }
 
         return current;
     }
-    private List<Waiting> getEnteredWaitingList(List<Waiting> waitingList){
-        List<Waiting> entered = new ArrayList<Waiting>();
+    private List<WaitingDTO> getEnteredWaitingList(List<Waiting> waitingList){
+        List<WaitingDTO> entered = new ArrayList<WaitingDTO>();
 
         for(Waiting w:waitingList){
-            if(w.getStatus()== WaitingStatus.ENTER) entered.add(w);
+            if(w.getStatus()== WaitingStatus.ENTER) {
+                WaitingDTO waitingDTO= new WaitingDTO();
+                waitingDTO.setWaiting(w);
+                Timestamp enteredAt = w.getEnteredAt();
+                String s = enteredAt.toString();
+                ArrayList<String> list = new ArrayList<>();
+                String str="";
+                for(int i=0;i<s.length();i++){
+                    char c = s.charAt(i);
+                    if(c=='-' || c==' ' || c==':') {
+                        list.add(str);
+                        str="";
+                    }
+                    else str+=c;
+                }
+                String result="";
+                result+=list.get(1)+"/"+list.get(2)+" "+list.get(3)+"시 "+list.get(4)+"분";
+                waitingDTO.setTime(result);
+                entered.add(waitingDTO);
+            }
         }
 
         return entered;

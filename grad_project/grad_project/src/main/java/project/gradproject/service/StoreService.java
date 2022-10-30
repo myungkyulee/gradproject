@@ -124,16 +124,20 @@ public class StoreService {
         storeDTO.setTableCount(store.getTableCount());
         storeDTO.setInfo(store.getInfo());
         storeDTO.setRestTableCount(store.getRestTableCount());
+        storeDTO.setLocationName(store.getLocationName());
+        storeDTO.setLocationX(store.getLocationX());
+        storeDTO.setLocationY(store.getLocationY());
 
         Address address = store.getAddress();
         String ad="";
-        if(address.getState()==null) {
+        ad= address.getTown();
+        /*if(address.getState()==null) {
             ad = address.getCity() + " " + address.getTown()
                     + " " + address.getStreet() + " " + address.getDetailAddress();
         } else {
             ad = address.getState() + " " + address.getCity() + " " + address.getTown()
                     + " " + address.getStreet() + " " + address.getDetailAddress();
-        }
+        }*/
         storeDTO.setAddress(ad);
         return storeDTO;
     }
