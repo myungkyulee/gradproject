@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
-public class Waiting {
+public class Waiting implements Comparable<Waiting> {
 
     @Id
     @GeneratedValue
@@ -66,4 +66,13 @@ public class Waiting {
     }
 
 
+    @Override
+    public int compareTo(Waiting o) {
+        if (this.getId() < o.getId()) {
+            return -1;
+        } else if(this.getId() > o.getId()){
+            return 1;
+        }
+        return 0;
+    }
 }

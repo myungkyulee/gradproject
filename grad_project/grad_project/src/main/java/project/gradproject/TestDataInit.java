@@ -36,8 +36,6 @@ public class TestDataInit {
         store1.setLocationX(126.9313759);
         store1.setLocationY(37.5483009);
         store1.setLocationName("서울특별시 마포구 창전동 444 서강쌍용예가");
-        Address address = storeService.splitAddress("서울특별시 마포구 창전동 444 서강쌍용예가");
-        store1.setAddress(address);
         store1.setInfo("대흥역 가마로강정인데 가마로는 원래 맛있어");
         store1.setStoreStatus(StoreStatus.CLOSED);
         store1.setImagePath("https://dnvefa72aowie.cloudfront.net/business/bizPlatform/profile/23534831/1623770243959/e6c6c2482e881b23ba471d27a90eaaa7cdb5fab9615bf54e31b419d49e25873c.jpeg?q=82&s=640x640&t=crop");
@@ -50,10 +48,8 @@ public class TestDataInit {
         store2.setRestTableCount(20);
         store2.setLocationX(126.9290697);
         store2.setLocationY(37.5672271);
-        store2.setLocationName("서울 서대문구 연희맛로 17-14 1층");
+        store2.setLocationName("서울시 서대문구 연희맛로 17-14 1층");
 
-        Address address1 = storeService.splitAddress("서울특별시 서대문구 연희맛로 17-14 1층");
-        store2.setAddress(address1);
         store2.setInfo("동태찜 전문점인데 아구찜이 너무 맛있어");
         store2.setStoreStatus(StoreStatus.CLOSED);
         store2.setImagePath("https://t1.daumcdn.net/cfile/tistory/14469E4E51788ECE1B");
@@ -67,8 +63,7 @@ public class TestDataInit {
         store3.setLocationX(126.9902802);
         store3.setLocationY(37.5738066);
         store3.setLocationName("서울특별시 종로구 익선동 166-18");
-        Address address2 = storeService.splitAddress("서울특별시 종로구 익선동 166-18");
-        store3.setAddress(address2);
+
         store3.setInfo("파스타 맛있어 진심");
         store3.setStoreStatus(StoreStatus.CLOSED);
         store3.setImagePath("https://img.siksinhot.com/place/1536302691681018.jpg?w=307&h=300&c=Y");

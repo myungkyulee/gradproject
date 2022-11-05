@@ -63,7 +63,7 @@ public class UserController {
 
         model.addAttribute("stores", stores);
         model.addAttribute("user", user);
-        return "user/userHome";
+        return "user/newUserHome";
     }
 
     @GetMapping("/{storeName}")
@@ -147,13 +147,22 @@ public class UserController {
     @GetMapping("/search")
     public String search(@ModelAttribute("keyword") String keyword, Model model) {
 
-        if (keyword.equals("")) return "user/searchForm";
+        if (keyword.equals("")) {
+            List<String> str = new ArrayList<>();
+            str.add("망원동");
+            str.add("닭강정");
+            str.add("테스트");
+            str.add("검색어");
+            str.add("자고싶다");
+            model.addAttribute("keywords", str);
+            return "user/newSearchForm";
+        }
         List<String> keywords = keywordService.splitKeyword(keyword);
         List<Store> storeList = storeService.findKeywordStores(keywords);
 
         List<StoreDTO> stores = storeService.setStoreDTO(storeList);
         model.addAttribute("stores", stores);
-        return "user/search";
+        return "user/newSearch";
     }
 
     private List<Waiting> getWaitingOnList(User user) {
@@ -214,7 +223,7 @@ public class UserController {
 
 
         model.addAttribute("stores",stores);
-        return "user/favorite";
+        return "user/newFavorite";
     }
 
     @GetMapping("/info")
@@ -312,6 +321,17 @@ public class UserController {
             if(w.getStatus()== WaitingStatus.WAIT) {
                 WaitingDTO waitingDTO= new WaitingDTO();
                 waitingDTO.setWaiting(w);
+                List<Waiting> storeWaitingList  = waitingService.getStoreCurrentWaitingList(w.getStore().getId());
+                //Collections.sort(storeWaitingList);
+                for (int num = 0; num < storeWaitingList.size(); num++) {
+                    System.out.println(storeWaitingList.get(num).getUser().getName());
+                    if (w.getId() == storeWaitingList.get(num).getId()) {
+                        waitingDTO.setNum(num + 1);
+                        break;
+                    }
+                }
+
+
                 Timestamp createdAt = w.getCreatedAt();
                 String s = createdAt.toString();
                 ArrayList<String> list = new ArrayList<>();
@@ -337,7 +357,7 @@ public class UserController {
         List<WaitingDTO> entered = new ArrayList<WaitingDTO>();
 
         for(Waiting w:waitingList){
-            if(w.getStatus()== WaitingStatus.ENTER) {
+            if(w.getStatus()!= WaitingStatus.WAIT) {
                 WaitingDTO waitingDTO= new WaitingDTO();
                 waitingDTO.setWaiting(w);
                 Timestamp enteredAt = w.getEnteredAt();

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreKeyword;
 import project.gradproject.domain.store.StoreStatus;
+import project.gradproject.domain.waiting.Waiting;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -68,6 +69,7 @@ public class StoreRepository {
                 .getResultList();
 
     }
+
 
 
 

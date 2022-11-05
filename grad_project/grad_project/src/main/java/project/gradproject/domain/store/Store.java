@@ -27,9 +27,9 @@ public class Store  {
     private String loginPassword;
 
     private String name;
+    private String email;
+    private String phoneNumber;
 
-    @Embedded
-    private Address address;
 
     private Integer tableCount;  // 가게에 있는 총 테이블 개수
 

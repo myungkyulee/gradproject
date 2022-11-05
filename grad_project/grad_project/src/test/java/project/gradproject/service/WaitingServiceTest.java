@@ -9,6 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
+import project.gradproject.domain.waiting.Waiting;
+import project.gradproject.domain.waiting.WaitingStatus;
+import project.gradproject.repository.WaitingRepository;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,6 +30,8 @@ class WaitingServiceTest {
 
     @Autowired
     private WaitingService waitingService;
+    @Autowired
+    private WaitingRepository waitingRepository;
 
     @Test
 //    @Commit

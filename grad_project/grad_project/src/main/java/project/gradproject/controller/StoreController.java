@@ -7,7 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import project.gradproject.domain.LocationDTO;
+import project.gradproject.domain.StoreJoinForm;
+import project.gradproject.domain.store.PosStoreReq;
 import project.gradproject.domain.store.Store;
+import project.gradproject.domain.waiting.StoreWaitingDTO;
 import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.domain.waiting.WaitingStatus;
 import project.gradproject.service.StoreService;
@@ -71,7 +75,7 @@ public class StoreController {
         store.setWaitingList(waitingList);
 
         model.addAttribute("store", store);
-        return "store/storeHome";
+        return "store/html/index";
     }
 
     /*@PostMapping
@@ -95,10 +99,108 @@ public class StoreController {
         return "redirect:/store";
     }
 
+    @GetMapping("/currentWaiting")
+    public String getCurrentWaitingList(HttpServletRequest request,
+                                 Model model){
+        System.out.println("controller Ok");
+        HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
+        Long storeId = (Long) session.getAttribute("loginStoreId");
+        if(storeId==null) return "redirect:/";
+
+        List<StoreWaitingDTO> storeCurrentWaitingList = waitingService.findStoreCurrentWaitingList(storeId);
+        Store store = storeService.findOne(storeId);
+        model.addAttribute("store", store);
+        model.addAttribute("waitings", storeCurrentWaitingList);
+
+        return "store/html/current-waiting";
+    }
+    @GetMapping("/lastWaiting")
+    public String getLastWaitingList(HttpServletRequest request,
+                                 Model model){
+        HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
+        Long storeId = (Long) session.getAttribute("loginStoreId");
+        if(storeId==null) return "redirect:/";
+
+        List<StoreWaitingDTO> storeCurrentWaitingList = waitingService.findStoreLastWaitingList(storeId);
+        Store store = storeService.findOne(storeId);
+        model.addAttribute("store", store);
+        model.addAttribute("waitings", storeCurrentWaitingList);
+
+        return "store/html/last-waiting";
+    }
+    @GetMapping("/info")
+    public String getStoreInfo(HttpServletRequest request,
+                                 Model model){
+        HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
+        Long storeId = (Long) session.getAttribute("loginStoreId");
+        if(storeId==null) return "redirect:/";
+        Store store = storeService.findOne(storeId);
+        model.addAttribute("store", store);
+
+        return "store/html/store-info";
+    }
+    @PostMapping("/info")
+    public String updateStoreInfo(HttpServletRequest request,
+                               @ModelAttribute PosStoreReq posStoreReq,
+                               Model model){
+        System.out.println("updateStoreInfo");
+        System.out.println("updateStoreInfo");
+        System.out.println("updateStoreInfo");
+        System.out.println("updateStoreInfo");
+        System.out.println("updateStoreInfo");
+        System.out.println("updateStoreInfo");
+        System.out.println("updateStoreInfo");
+        System.out.println("updateStoreInfo");
+        HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
+        Long storeId = (Long) session.getAttribute("loginStoreId");
+        if(storeId==null) return "redirect:/";
+        Store store = storeService.updateStoreInfo(storeId, posStoreReq);
+        model.addAttribute("store", store);
+
+        return "store/html/store-info";
+    }
+    @GetMapping("/info/location")
+    public String getLocationForm(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
+        Long storeId = (Long) session.getAttribute("loginStoreId");
+        if(storeId==null) return "redirect:/";
+        Store store = storeService.findOne(storeId);
+        model.addAttribute("user", store);
+
+        return "user/location";
+    }
+    @PostMapping("/info/location")
+    public String updateLocation(@ModelAttribute LocationDTO location, HttpServletRequest request, Model model){
+        System.out.println("updateLocation");
+        System.out.println("updateLocation");
+        System.out.println("updateLocation");
+        System.out.println("updateLocation");
+        System.out.println("updateLocation");
+        System.out.println("updateLocation");
+        System.out.println(location.getLocation());
+        System.out.println(location.getX());
+        System.out.println(location.getY());
+
+        HttpSession session = request.getSession(false);
+        if(session==null) return "redirect:/";
+        Long storeId = (Long) session.getAttribute("loginStoreId");
+        if(storeId==null) return "redirect:/";
+
+        Store store = storeService.updateStoreLocation(storeId, location);
+        model.addAttribute("store", store);
+
+        return "redirect:/store/info";
+    }
+
     @PostMapping("/{waitingId}/entrance")
     public String entrance(@PathVariable Long waitingId){
         waitingService.enterWaiting(waitingId);
-        return "redirect:/store";
+        return "redirect:/store/currentWaiting";
     }
 
 

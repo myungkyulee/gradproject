@@ -54,19 +54,18 @@ public class JoinController {
 
         String ad = storeForm.getLocationName();
 
-        Address address = storeService.splitAddress(ad);
+
 
 
 
         Store store = new Store();
-        store.setAddress(address);
+
         store.setLocationName(ad);
         store.setLocationX(storeForm.getLocationX());
         store.setLocationY(storeForm.getLocationY());
         store.setName(storeForm.getName());
         store.setLoginId(storeForm.getLoginId());
         store.setLoginPassword(storeForm.getPassword());
-        store.setAddress(address);
         store.setTableCount(storeForm.getTableCount());
         store.setStoreStatus(StoreStatus.CLOSED);
         store.setRestTableCount(store.getTableCount());

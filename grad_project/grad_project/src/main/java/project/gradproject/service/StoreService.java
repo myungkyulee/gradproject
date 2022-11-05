@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.gradproject.domain.Favorite;
 import project.gradproject.domain.Keyword;
+import project.gradproject.domain.LocationDTO;
 import project.gradproject.domain.StoreDTO;
-import project.gradproject.domain.store.Address;
-import project.gradproject.domain.store.Store;
-import project.gradproject.domain.store.StoreKeyword;
-import project.gradproject.domain.store.StoreStatus;
+import project.gradproject.domain.store.*;
+import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.repository.KeywordRepository;
 import project.gradproject.repository.StoreKeywordRepository;
 import project.gradproject.repository.StoreRepository;
@@ -82,6 +81,28 @@ public class StoreService {
         store.setRestTableCount(restTable);
 
     }
+    @Transactional
+    public Store updateStoreInfo(Long id, PosStoreReq posStoreReq) {
+        Store store = storeRepository.findById(id);
+        store.setName(posStoreReq.getName());
+        store.setEmail(posStoreReq.getEmail());
+        store.setPhoneNumber(posStoreReq.getPhoneNumber());
+        store.setTableCount(posStoreReq.getTableCount());
+        store.setInfo(posStoreReq.getInfo());
+        store.setLocationName(posStoreReq.getAddress());
+        store.setLocationX(posStoreReq.getX());
+        store.setLocationY(posStoreReq.getY());
+        return store;
+    }
+    @Transactional
+    public Store updateStoreLocation(Long id, LocationDTO location) {
+        Store store = storeRepository.findById(id);
+        store.setLocationName(location.getLocation());
+        store.setLocationX(location.getX());
+        store.setLocationY(location.getY());
+        return store;
+
+    }
 
     @Transactional
     public void openStore(Long id) {
@@ -128,16 +149,9 @@ public class StoreService {
         storeDTO.setLocationX(store.getLocationX());
         storeDTO.setLocationY(store.getLocationY());
 
-        Address address = store.getAddress();
+
         String ad="";
-        ad= address.getTown();
-        /*if(address.getState()==null) {
-            ad = address.getCity() + " " + address.getTown()
-                    + " " + address.getStreet() + " " + address.getDetailAddress();
-        } else {
-            ad = address.getState() + " " + address.getCity() + " " + address.getTown()
-                    + " " + address.getStreet() + " " + address.getDetailAddress();
-        }*/
+        ad = getTown(store.getLocationName());
         storeDTO.setAddress(ad);
         return storeDTO;
     }
@@ -153,7 +167,7 @@ public class StoreService {
     }
 
 
-    public Address splitAddress(String ad) {
+    public String getTown(String ad) {
         String s="";
         List<String> list = new ArrayList<>();
         boolean check=false;
@@ -188,8 +202,7 @@ public class StoreService {
         for(int i=4;i<list.size();i++){
             str+=list.get(i)+' ';
         }
-        Address address = new Address(list.get(0),list.get(1),list.get(2),list.get(3),str);
-        return address;
+        return list.get(2);
     }
 
     /*public List<StoreKeyword> findKeywordStores(String keyword){
@@ -216,4 +229,5 @@ public class StoreService {
         }
         return storeList;
     }
+
 }
