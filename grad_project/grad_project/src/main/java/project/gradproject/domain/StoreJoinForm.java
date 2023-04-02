@@ -1,9 +1,9 @@
 package project.gradproject.domain;
 
 import lombok.Data;
-import project.gradproject.domain.store.Address;
 
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -13,7 +13,8 @@ public class StoreJoinForm {
     @NotEmpty
     private String name;
     @NotEmpty
-    private String loginId;
+    @Email
+    private String email;
     @NotEmpty
     private String password;
 

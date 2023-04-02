@@ -24,7 +24,6 @@ public class WaitingRepository {
     }
 
     public List<Waiting> findStoreCurrentWaitingList(Long storeId) {
-
         String jpql = "select w From Waiting w join w.store s " +
                 "where s.id = :storeId AND w.status = :status " +
                 "order by w.createdAt ASC";
@@ -34,8 +33,8 @@ public class WaitingRepository {
                 .setParameter("status", WaitingStatus.WAIT)
                 .getResultList();
     }
-    public List<Waiting> findStoreLastWaitingList(Long storeId) {
 
+    public List<Waiting> findStoreLastWaitingList(Long storeId) {
         String jpql = "select w From Waiting w join w.store s " +
                 "where s.id = :storeId AND w.status != :status " +
                 "order by w.createdAt DESC";

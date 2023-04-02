@@ -24,74 +24,28 @@ public class HomeController {
     private final StoreService storeService;
     private final UserService userService;
 
-    @GetMapping("/")
-    public String home(){
+    @GetMapping("/login")
+    public String loginForm() {
         return "home";
     }
 
-  /*  @PostMapping("/")
+    @PostMapping("/login")
     public String login(@Valid @ModelAttribute MemberLoginForm member,
                         BindingResult bindingResult,
-                        HttpServletRequest request){
+                        HttpServletRequest request) {
+        log.info("[HomeController] login");
 
-        if(bindingResult.hasErrors()){
-            return "home";
-        }
-
-        if(member.getType().equals("store")){
-            Store loginStore = storeService.login((member.getLoginId()), member.getPassword());
-
-            //로그인 실패시
-            if(loginStore==null){
-                bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-                return "home";
-            }
-
-            // 로그인 성공시
-            //세션 있으면 세션 반환, 없으면 신규세션 생성해서 반환
-            loginStore.setStoreStatus(StoreStatus.OPEN);
-            HttpSession session = request.getSession();
-            //세션에 로그인 회원 정보 보관
-            session.setAttribute("loginStore", loginStore);
-
-            return "redirect:/store";
-        }
-        if(member.getType().equals("user")){
-
-        }
-
-
-        return "home";
-        *//*
-
-        if(type.equals("user")) {
-            return "redirect:/";
-        }
-        else if(type.equals("store")){
-            // 로그인 인증과정을 거치고~~~~~
-            if( storeService.loginCheck(username, password)!=null) {
-                Store store = storeService.loginCheck(username, password);
-                store.setStoreStatus(StoreStatus.OPEN);
-                return "redirect:/store/"+store.getId();
-            }
-        }
-        return "redirect:/";*//*
-    }*/
-    @PostMapping("/")
-    public String login(@Valid @ModelAttribute MemberLoginForm member,
-                        BindingResult bindingResult,
-                        HttpServletRequest request){
-
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "home";
         }
 
         // store로그인
-        if(member.getType().equals("store")){
-            Store loginStore = storeService.login((member.getLoginId()), member.getPassword());
+        if (member.getType().equals("store")) {
+            Store loginStore =
+                    storeService.login(member.getEmail(), member.getPassword());
 
             //로그인 실패시
-            if(loginStore==null){
+            if (loginStore == null) {
                 bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
                 return "home";
             }
@@ -99,18 +53,19 @@ public class HomeController {
             // 로그인 성공시
             //세션 있으면 세션 반환, 없으면 신규세션 생성해서 반환
             HttpSession session = request.getSession();
-            session.setAttribute("loginStoreId",loginStore.getId());
+
+            session.setAttribute("loginStoreId", loginStore.getId());
 
 
             return "redirect:/store";
         }
 
         // 유저로그인
-        if(member.getType().equals("user")){
-            User loginUser = userService.login(member.getLoginId(), member.getPassword());
+        if (member.getType().equals("user")) {
+            User loginUser = userService.login(member.getEmail(), member.getPassword());
 
             // 로그인 실패
-            if(loginUser==null) {
+            if (loginUser == null) {
                 bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
 
                 return "home";
@@ -121,17 +76,15 @@ public class HomeController {
             session.setAttribute("loginUserId", loginUser.getId());
 
             return "redirect:/user";
-
         }
-
 
         return "home";
     }
 
     @PostMapping("/store/logout")
-    public String logoutStore(HttpServletRequest request){
+    public String logoutStore(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if(session==null) return "redirect:/";
+        if (session == null) return "redirect:/";
         Long storeId = (Long) session.getAttribute("loginStoreId");
         storeService.closeStore(storeId);
         session.invalidate();

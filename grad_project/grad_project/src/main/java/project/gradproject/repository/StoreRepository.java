@@ -5,13 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreKeyword;
-import project.gradproject.domain.store.StoreStatus;
-import project.gradproject.domain.waiting.Waiting;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,16 +24,9 @@ public class StoreRepository {
         return em.find(Store.class, storeId);
     }
 
-    public Optional<Store> findByLoginId(String loginId){
-        /*List<Store> all =findAll();
-        for(Store m : all){
-            return Optional.of(m);
-        }
-        return Optional.empty();
-*/
-
+    public Optional<Store> findByEmail(String email){
         return findAll().stream()
-                .filter(m-> m.getLoginId().equals(loginId))
+                .filter(m-> m.getEmail().equals(email))
                 .findFirst();
     }
 

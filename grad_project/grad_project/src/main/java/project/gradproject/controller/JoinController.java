@@ -9,40 +9,35 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.gradproject.domain.StoreJoinForm;
 import project.gradproject.domain.UserJoinForm;
-import project.gradproject.domain.store.Address;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
 import project.gradproject.service.StoreService;
 import project.gradproject.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/join")
 public class JoinController {
 
     private final StoreService storeService;
     private final UserService userService;
 
     @GetMapping
-    public String addForm(){
+    public String addForm() {
         return "join/addMemberForm";
     }
 
-    @GetMapping("/addStore")
-    public String addStoreForm(@ModelAttribute("member") StoreJoinForm store){
+    @GetMapping("/store")
+    public String addStoreForm(@ModelAttribute("member") StoreJoinForm store) {
 
 
         return "join/addStoreForm";
     }
-    @PostMapping("/addStore")
+
+    @PostMapping("/store")
     public String saveStore(@Validated @ModelAttribute("member") StoreJoinForm storeForm, BindingResult result) {
         if (result.hasErrors()) {
             return "join/addStoreForm";
@@ -55,17 +50,13 @@ public class JoinController {
         String ad = storeForm.getLocationName();
 
 
-
-
-
         Store store = new Store();
 
         store.setLocationName(ad);
         store.setLocationX(storeForm.getLocationX());
         store.setLocationY(storeForm.getLocationY());
         store.setName(storeForm.getName());
-        store.setLoginId(storeForm.getLoginId());
-        store.setLoginPassword(storeForm.getPassword());
+        store.setPassword(storeForm.getPassword());
         store.setTableCount(storeForm.getTableCount());
         store.setStoreStatus(StoreStatus.CLOSED);
         store.setRestTableCount(store.getTableCount());
@@ -76,20 +67,21 @@ public class JoinController {
 
         return "redirect:/";
     }
-    @GetMapping("/addStore/location")
-    public String storeLocation(@ModelAttribute("store") StoreJoinForm storeJoinForm, Model model){
 
-        if(storeJoinForm.getLocationName()==null) storeJoinForm.setLocationName("위치를 설정해주세요");
+    @GetMapping("/store/location")
+    public String storeLocation(@ModelAttribute("store") StoreJoinForm storeJoinForm, Model model) {
+
+        if (storeJoinForm.getLocationName() == null) storeJoinForm.setLocationName("위치를 설정해주세요");
         model.addAttribute("user", storeJoinForm);
         return "user/location";
     }
 
 
-    @PostMapping("/addStore/location")
+    @PostMapping("/store/location")
     public String locationUpdate(@RequestParam("location") String location,
                                  @RequestParam("x") Double x,
                                  @RequestParam("y") Double y,
-                                 Model model){
+                                 Model model) {
 
         System.out.println("OK");
         System.out.println(location);
@@ -105,27 +97,22 @@ public class JoinController {
     }
 
 
-    @GetMapping("/addUser")
-    public String addUserForm(@ModelAttribute("member") UserJoinForm user){
+    @GetMapping("/user")
+    public String addUserForm(@ModelAttribute("member") UserJoinForm user) {
         return "join/addUserForm";
     }
-    @PostMapping("/addUser")
-    public String saveUser(@ModelAttribute("member") UserJoinForm userForm, BindingResult result) {
+
+    @PostMapping("/user")
+    public String createUser(@ModelAttribute("member") UserJoinForm userForm,
+                             BindingResult result) {
 
         if (result.hasErrors()) {
             return "join/addUserForm";
         }
 
-        User user = new User();
-        user.setName(userForm.getName());
-        user.setLoginId(userForm.getLoginId());
-        user.setLoginPassword(userForm.getPassword());
-
-        userService.join(user);
-        return "redirect:/";
+        userService.join(userForm);
+        return "redirect:/login";
     }
-
-
 
 
 }

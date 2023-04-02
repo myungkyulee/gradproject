@@ -35,11 +35,11 @@
           <input
             type="text"
             id="loginId"
-            th:field="*{loginId}"
+            th:field="*{getEmail}"
             class="form-control"
             th:errorclass="field-error"
           />
-          <div class="field-error" th:errors="*{loginId}" />
+          <div class="field-error" th:errors="*{getEmail}" />
         </div>
         <div>
           <label for="password">비밀번호</label>

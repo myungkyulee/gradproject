@@ -28,7 +28,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreController {
 
-
     private final StoreService storeService;
     private final WaitingService waitingService;
 
@@ -56,26 +55,8 @@ public class StoreController {
 
 
     @GetMapping
-    public String storeHome(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession(false);
-        if(session==null) return "redirect:/";
-
-        Long loginStoreId = (Long) session.getAttribute("loginStoreId");
-        if(loginStoreId==null) return "redirect:/";
-
-        Store store = storeService.findOne(loginStoreId);
-        List<Waiting> waitings = store.getWaitingList();
-        List<Waiting> waitingList = new ArrayList<>();
-        for(int i=0;i<waitings.size();i++){
-            Waiting waiting = waitings.get(i);
-            if(waiting.getStatus()==WaitingStatus.WAIT){
-                waitingList.add(waiting);
-            }
-        }
-        store.setWaitingList(waitingList);
-
-        model.addAttribute("store", store);
-        return "store/html/index";
+    public String storeHome(){
+        return "redirect:/store/currentWaiting";
     }
 
     /*@PostMapping

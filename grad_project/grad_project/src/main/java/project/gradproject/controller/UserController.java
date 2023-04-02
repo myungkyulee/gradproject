@@ -12,6 +12,7 @@ import project.gradproject.domain.store.Address;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreDist;
 import project.gradproject.domain.store.StoreStatus;
+import project.gradproject.domain.user.SearchWord;
 import project.gradproject.domain.user.User;
 import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.domain.waiting.WaitingDTO;
@@ -51,11 +52,11 @@ public class UserController {
 
         List<StoreDTO> stores;
         User user = userService.findOne(loginUserId);
-        if(user.getLocationX()==null || user.getLocationY()==null){
+
+        if (user.getLocationX() == null || user.getLocationY() == null) {
             List<Store> stores1 = storeService.findStores();
             stores = storeService.setStoreDTO(stores1);
-        }
-        else{
+        } else {
             List<Store> storeList = userService.sortByDistance(user);
             stores = storeService.setStoreDTO(storeList);
         }
@@ -77,8 +78,7 @@ public class UserController {
         User user = userService.findOne(loginUserId);
         Store store = storeService.findOneByName(name);
         List<Favorite> favorites = user.getFavorites();
-        Boolean check = false;
-
+        boolean check = false;
 
         for (Favorite f : favorites) {
             if (f.getStore() == store) {
@@ -86,8 +86,7 @@ public class UserController {
                 break;
             }
         }
-        Boolean storeOpenCheck=false;
-        if(store.getStoreStatus()==StoreStatus.OPEN) storeOpenCheck=true;
+        boolean storeOpenCheck = store.getStoreStatus() == StoreStatus.OPEN;
 
         StoreDTO storeDTO = storeService.setStoreDTO(store);
         System.out.println(storeDTO.getLocationX());
@@ -117,10 +116,8 @@ public class UserController {
         Store store = storeService.findOneByName(name);
         User user = userService.findOne(loginUserId);
 
-
         List<Waiting> waitingOnList = getWaitingOnList(user);
         int count = waitingOnList.size();
-
 
         Waiting check = waitingOnList.stream()
                 .filter(waiting -> waiting.getStore() == store)
@@ -145,18 +142,24 @@ public class UserController {
 
 
     @GetMapping("/search")
-    public String search(@ModelAttribute("keyword") String keyword, Model model) {
+    public String search(@ModelAttribute("keyword") String keyword,
+                         HttpServletRequest request,
+                         Model model) {
+        HttpSession session = request.getSession(false);
+        if (session == null) return "redirect:/";
+        Long loginUserId = (Long) session.getAttribute("loginUserId");
+        if (loginUserId == null) return "redirect:/";
 
         if (keyword.equals("")) {
-            List<String> str = new ArrayList<>();
-            str.add("망원동");
-            str.add("닭강정");
-            str.add("테스트");
-            str.add("검색어");
-            str.add("자고싶다");
-            model.addAttribute("keywords", str);
+            User user = userService.findOne(loginUserId);
+            List<SearchWord> searchWords = user.getSearchWords();
+
+            model.addAttribute("keywords", searchWords);
             return "user/newSearchForm";
         }
+
+        userService.addSearchWord(loginUserId, keyword);
+
         List<String> keywords = keywordService.splitKeyword(keyword);
         List<Store> storeList = storeService.findKeywordStores(keywords);
 
@@ -195,7 +198,7 @@ public class UserController {
                 break;
             }
         }
-        if (check != true) {
+        if (!check) {
             userService.favorite(store.getId(), user.getId());
         }
 
@@ -238,8 +241,7 @@ public class UserController {
 
         model.addAttribute("user",user);
 
-
-        return "user/info";
+        return "user/newInfo";
     }
 
     @GetMapping("/currentWaitingList")
@@ -257,10 +259,11 @@ public class UserController {
 
         model.addAttribute("waitings",currentWaitingList);
 
-        return "user/currentWaitingList";
+        return "user/newCurrentWaitingList";
     }
-    @GetMapping("/enteredWaitingList")
-    public String enteredList(HttpServletRequest request, Model model){
+
+    @GetMapping("/lastWaitingList")
+    public String lastList(HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
 
         if(session==null) return "redirect:/";
@@ -268,14 +271,12 @@ public class UserController {
         if(userId==null) return "redirect:/";
 
         User user = userService.findOne(userId);
-
         List<Waiting> waitingList = user.getWaitingList();
-
         List<WaitingDTO> enteredWaitingList = getEnteredWaitingList(waitingList);
 
         model.addAttribute("waitings",enteredWaitingList);
 
-        return "user/enteredWaitingList";
+        return "user/newLastWaitingList";
     }
 
     @GetMapping("/location")
@@ -317,11 +318,11 @@ public class UserController {
     private List<WaitingDTO> getCurrentWaitingList(List<Waiting> waitingList){
         List<WaitingDTO> current = new ArrayList<>();
 
-        for(Waiting w:waitingList){
-            if(w.getStatus()== WaitingStatus.WAIT) {
-                WaitingDTO waitingDTO= new WaitingDTO();
+        for (Waiting w : waitingList) {
+            if (w.getStatus() == WaitingStatus.WAIT) {
+                WaitingDTO waitingDTO = new WaitingDTO();
                 waitingDTO.setWaiting(w);
-                List<Waiting> storeWaitingList  = waitingService.getStoreCurrentWaitingList(w.getStore().getId());
+                List<Waiting> storeWaitingList = waitingService.getStoreCurrentWaitingList(w.getStore().getId());
                 //Collections.sort(storeWaitingList);
                 for (int num = 0; num < storeWaitingList.size(); num++) {
                     System.out.println(storeWaitingList.get(num).getUser().getName());
@@ -335,17 +336,16 @@ public class UserController {
                 Timestamp createdAt = w.getCreatedAt();
                 String s = createdAt.toString();
                 ArrayList<String> list = new ArrayList<>();
-                String str="";
-                for(int i=0;i<s.length();i++){
+                String str = "";
+                for (int i = 0; i < s.length(); i++) {
                     char c = s.charAt(i);
-                    if(c=='-' || c==' ' || c==':') {
+                    if (c == '-' || c == ' ' || c == ':') {
                         list.add(str);
-                        str="";
-                    }
-                    else str+=c;
+                        str = "";
+                    } else str += c;
                 }
-                String result="";
-                result+=list.get(1)+"/"+list.get(2)+" "+list.get(3)+"시 "+list.get(4)+"분";
+                String result = "";
+                result += list.get(1) + "-" + list.get(2) + " " + list.get(3) + ":" + list.get(4);
                 waitingDTO.setTime(result);
                 current.add(waitingDTO);
             }
@@ -353,6 +353,7 @@ public class UserController {
 
         return current;
     }
+
     private List<WaitingDTO> getEnteredWaitingList(List<Waiting> waitingList){
         List<WaitingDTO> entered = new ArrayList<WaitingDTO>();
 
@@ -373,7 +374,7 @@ public class UserController {
                     else str+=c;
                 }
                 String result="";
-                result+=list.get(1)+"/"+list.get(2)+" "+list.get(3)+"시 "+list.get(4)+"분";
+                result+=list.get(1)+"-"+list.get(2)+" "+list.get(3)+":"+list.get(4);
                 waitingDTO.setTime(result);
                 entered.add(waitingDTO);
             }

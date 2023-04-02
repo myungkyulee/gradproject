@@ -34,6 +34,7 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../assets/img/restaurant.jpg" />
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -77,85 +78,88 @@
     >
 
 
-      <form action="" method="get" class="navbar-nav-right d-flex align-items-center justify-content-between" id="navbar-collapse">
-        <!-- Search -->
-        <i class='bx bx-search fs-4 lh-0' ></i>
-
-        <input
-                type="text"
-                name="keyword"
-                class="form-control border-0 shadow-none"
-                placeholder="지역, 매장명, 카테고리"
-                aria-label="Search..."
-        />
-        <input type="submit" hidden />
+      <!-- title -->
+      <div action="" method="get" class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+        <a th:href="@{/user/info}" href="info.html">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="favorite">웨이팅 리스트</div>
 
 
-      </form>
-      <!-- /Search-->
+      </div>
+      <!-- /title-->
     </nav>
 
     <!-- / Navbar -->
 
-    <!-- Content wrapper -->
-    <div class="content-wrapper">
-      <!-- Content -->
+    <!-- / Content -->
+  </div>
 
-      <!--최근 검색어-->
-      <div class="container-xxl flex-grow-1 container-p-y">
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Content -->
 
-        <div class="mb-4 order-0">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-pills flex-column flex-md-row mb-3">
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{currentWaitingList}" href="newCurrentWaitingList.html">
+                현재 웨이팅</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active"
+                 href="javascript:void(0);"
+              > 지난 웨이팅</a
+              >
+            </li>
+          </ul>
+
+          <!-- Responsive Table -->
           <div class="card">
-            <div class="card-header">
-              <h5 class="card-title text-primary fw-bold">최근 검색어</h5>
-            </div>
-            <div class="card-body" >
-              <div class="mb-2" th:each="keyword:${keywords}">
-                <a th:text="${keyword.word}" href="#" th:href="@{?keyword={keyword}(keyword=${keyword.word})}">망원동</a>
-              </div>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                <tr class="text-nowrap">
+                  <th>시간</th>
+                  <th>대기자명</th>
+                  <th>인원수</th>
+                  <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="waiting:${waitings}">
+                  <form>
+                    <td th:text="${waiting.time}">11-03 00:30</td>
+                    <td th:text="${waiting.waiting.store.name}">누나홀닭</td>
+                    <td th:text="${waiting.waiting.peopleNum}">4</td>
+                    <td th:text="${waiting.waiting.status}">입장</td>
+                  </form>
+                </tr>
+
+                </tbody>
+              </table>
             </div>
           </div>
+          <!--/ Responsive Table -->
         </div>
-
-
-
       </div>
-      <!-- /최근 검색어-->
     </div>
     <!-- / Content -->
 
 
+    <!-- / Footer -->
 
     <div class="content-backdrop fade"></div>
   </div>
-  <div class="empty-nav"></div>
-  <!-- nav-->
-  <nav class="nav-app">
-    <div class="nav__list">
-      <div class="nav__btn">
-        <a class="nav__link unclicked" href="userHome.html" th:href="@{/user}">
-          <i class='bx bx-home fs-1 lh-0' ></i>
-        </a>
-      </div>
-      <div class="nav__btn">
-        <a class="nav__link" href="search.html" th:href="@{/user/search}">
-          <i class='bx bx-search fs-1 lh-0' ></i>
-        </a>
-      </div>
-      <div class="nav__btn">
-        <a class="nav__link unclicked" href="favorite.html" th:href="@{/user/favorite}">
-          <i class='bx bx-heart fs-1 lh-0' ></i>
-        </a>
-      </div>
-      <div class="nav__btn">
-        <a class="nav__link unclicked" href="info.html" th:href="@{/user/info}">
-          <i class='bx bx-user fs-1 lh-0' ></i>
-        </a>
-      </div>
-    </div>
-  </nav>
-  <!-- / nav-->
   <!-- Content wrapper -->
+  <div class="content-backdrop fade"></div>
+</div>
+
+<!-- nav-->
+
+<!-- / nav-->
+<!-- Content wrapper -->
 </div>
 
 <!-- Overlay -->

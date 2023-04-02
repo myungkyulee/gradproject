@@ -1,33 +1,29 @@
 package project.gradproject.domain.store;
 
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import project.gradproject.domain.Favorite;
+import project.gradproject.domain.Member;
 import project.gradproject.domain.waiting.Waiting;
 
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Entity
 @Getter @Setter
-public class Store  {
+public class Store implements Member {
 
     @Id
     @GeneratedValue
     @Column(name="store_id")
     private Long id;
 
-    private String loginId;
-    private String loginPassword;
+    private String email;
+    private String password;
 
     private String name;
-    private String email;
     private String phoneNumber;
 
 
@@ -44,6 +40,9 @@ public class Store  {
     private Double locationX;
     private Double locationY;
 
+    //권한
+    private String role;
+
 
     @Enumerated(EnumType.STRING)
     private StoreStatus storeStatus;  // 매장 오픈 여부
@@ -56,6 +55,6 @@ public class Store  {
 
     @Override
     public String toString() {
-        return loginId+" "+loginPassword+" "+name;
+        return email +" "+ password +" "+name;
     }
 }

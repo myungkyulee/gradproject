@@ -80,8 +80,10 @@
 
             <!-- title -->
             <div action="" method="get" class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                <i class='bx bx-heart' ></i>
-                <div class="favorite">관심 가게</div>
+                <a th:href="@{/user/info}" href="info.html">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="favorite">웨이팅 리스트</div>
 
 
             </div>
@@ -89,79 +91,76 @@
         </nav>
 
         <!-- / Navbar -->
+
+        <!-- / Content -->
+    </div>
+
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+        <!-- Content -->
+
         <div class="container-xxl flex-grow-1 container-p-y">
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-                <!-- Content -->
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="javascript:void(0);">
+                                현재 웨이팅</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="newLastWaitingList.html"
+                               th:href="@{lastWaitingList}"
+                            > 지난 웨이팅</a
+                            >
+                        </li>
+                    </ul>
 
-                <!-- storeComponent-->
-                <div class="col-12 order-2 order-md-3 order-lg-2 mb-2" th:each="store:${stores}">
-                    <div class="card h-100">
-                        <div class="store-compo">
-                            <a class="i-flex" href="storeForm.html" th:href="@{/user/{name}(name=${store.name})}">
-                                <div class="d-flex">
-                                    <div class="column">
-                                        <img
-                                                src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTExMDZfNjQg%2FMDAxNjM2MTMwMzg2NjE3.7ux8pWAUm2OKjKHASb4JoZPaxlQW2WL0yHWXwKR0N4og.wgSkaPnqjjdKE4tusCCZnGk2VlcJLRcGjCxtz4DFaF0g.JPEG.zeroy94%2F20211105%25A3%25DF191021.jpg&type=sc960_832"
-                                                th:src="${store.imagePath}"
-                                                class="store-component__picture"
-                                        >
-                                    </div>
-                                    <div class="store-info">
-                                        <div class="store-name" th:text="${store.name}">
-                                            누나홀닭
-                                        </div>
-                                        <div class="store-address" th:text="${store.address}">
-                                            망원동
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="store-restTable" th:text="${store.restTableCount}">
-                                    0
-                                </div>
+                    <!-- Responsive Table -->
+                    <div class="card">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table">
+                                <thead>
+                                <tr class="text-nowrap">
+                                    <th>시간</th>
+                                    <th>대기자명</th>
+                                    <th>인원수</th>
+                                    <th>순번</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="waiting:${waitings}">
+                                    <form>
+                                        <td th:text="${waiting.time}">11-03 00:30</td>
+                                        <td th:text="${waiting.waiting.store.name}">누나홀닭</td>
+                                        <td th:text="${waiting.waiting.peopleNum}">4</td>
+                                        <td th:text="${waiting.num}">3</td>
+                                    </form>
+                                </tr>
 
-                            </a>
-
+                                </tbody>
+                            </table>
                         </div>
-
                     </div>
+                    <!--/ Responsive Table -->
                 </div>
-                <!-- /storeComponent-->
             </div>
-            <!-- / Content -->
         </div>
+        <!-- / Content -->
 
+
+        <!-- / Footer -->
 
         <div class="content-backdrop fade"></div>
     </div>
-    <div class="empty-nav"></div>
-    <!-- nav-->
-    <nav class="nav-app">
-        <div class="nav__list">
-            <div class="nav__btn">
-                <a class="nav__link unclicked" href="newUserHome.html" th:href="@{/user}">
-                    <i class='bx bx-home fs-1 lh-0' ></i>
-                </a>
-            </div>
-            <div class="nav__btn">
-                <a class="nav__link unclicked" href="newSearch.html" th:href="@{/user/search}">
-                    <i class='bx bx-search fs-1 lh-0' ></i>
-                </a>
-            </div>
-            <div class="nav__btn">
-                <a class="nav__link" href="newFavorite.html" th:href="@{/user/favorite}">
-                    <i class='bx bx-heart fs-1 lh-0' ></i>
-                </a>
-            </div>
-            <div class="nav__btn">
-                <a class="nav__link unclicked" href="info.html" th:href="@{/user/info}">
-                    <i class='bx bx-user fs-1 lh-0' ></i>
-                </a>
-            </div>
-        </div>
-    </nav>
-    <!-- / nav-->
     <!-- Content wrapper -->
+    <div class="content-backdrop fade"></div>
+</div>
+
+<!-- nav-->
+
+<!-- / nav-->
+<!-- Content wrapper -->
 </div>
 
 <!-- Overlay -->

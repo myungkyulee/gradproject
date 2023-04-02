@@ -3,12 +3,10 @@ package project.gradproject.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.gradproject.domain.Favorite;
 import project.gradproject.domain.Keyword;
 import project.gradproject.domain.LocationDTO;
 import project.gradproject.domain.StoreDTO;
 import project.gradproject.domain.store.*;
-import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.repository.KeywordRepository;
 import project.gradproject.repository.StoreKeywordRepository;
 import project.gradproject.repository.StoreRepository;
@@ -68,8 +66,8 @@ public class StoreService {
             return null;
         }*/
 
-        return storeRepository.findByLoginId(loginId)
-                .filter(m -> m.getLoginPassword().equals(password))
+        return storeRepository.findByEmail(loginId)
+                .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
     }
 
@@ -129,13 +127,14 @@ public class StoreService {
         Store store = storeRepository.findById(storeId);
         Keyword keyword = keywordRepository.findById(keywordId);
 
-        StoreKeyword storeKeyword=StoreKeyword.createStoreKeyword(keyword);
+        StoreKeyword storeKeyword = StoreKeyword.createStoreKeyword(keyword);
 
         store.getStoreKeywords().add(storeKeyword);
         storeKeyword.setStore(store);
 
         storeKeywordRepository.save(storeKeyword);
     }
+
 
     public StoreDTO setStoreDTO(Store store) {
 

@@ -9,12 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
-import project.gradproject.domain.waiting.Waiting;
-import project.gradproject.domain.waiting.WaitingStatus;
 import project.gradproject.repository.WaitingRepository;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,8 +48,8 @@ class WaitingServiceTest {
         storeService.join(store);
 
         Store store2 = new Store();
-        store2.setLoginId("qwe");
-        store2.setLoginPassword("qwe");
+        store2.setEmail("qwe");
+        store2.setPassword("qwe");
         store2.setName("월순");
         store2.setTableCount(20);
         store2.setRestTableCount(20);

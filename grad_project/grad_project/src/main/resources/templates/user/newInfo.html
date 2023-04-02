@@ -34,6 +34,7 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../assets/img/restaurant.jpg" />
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -77,53 +78,40 @@
     >
 
 
-      <form action="" method="get" class="navbar-nav-right d-flex align-items-center justify-content-between" id="navbar-collapse">
-        <!-- Search -->
-        <i class='bx bx-search fs-4 lh-0' ></i>
-
-        <input
-                type="text"
-                name="keyword"
-                class="form-control border-0 shadow-none"
-                placeholder="지역, 매장명, 카테고리"
-                aria-label="Search..."
-        />
-        <input type="submit" hidden />
-
-
-      </form>
-      <!-- /Search-->
-    </nav>
-
-    <!-- / Navbar -->
-
-    <!-- Content wrapper -->
-    <div class="content-wrapper">
-      <!-- Content -->
-
-      <!--최근 검색어-->
-      <div class="container-xxl flex-grow-1 container-p-y">
-
-        <div class="mb-4 order-0">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title text-primary fw-bold">최근 검색어</h5>
-            </div>
-            <div class="card-body" >
-              <div class="mb-2" th:each="keyword:${keywords}">
-                <a th:text="${keyword.word}" href="#" th:href="@{?keyword={keyword}(keyword=${keyword.word})}">망원동</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <!-- title -->
+      <div action="" method="get" class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+        <i class='bx bx-user' ></i>
+        <div class="favorite" th:text="${user.name}">이명규</div>
 
 
       </div>
-      <!-- /최근 검색어-->
-    </div>
-    <!-- / Content -->
+      <!-- /title-->
+    </nav>
 
+    <!-- / Navbar -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+        <!-- Content -->
+
+        <!-- storeComponent-->
+        <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
+          <div class="card h-100">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <a class="i-flex"
+                 href="newCurrentWaitingList.html"
+                 th:href="@{currentWaitingList}"><h5 class="card-title m-0 me-2">
+                대기리스트
+              </h5></a>
+
+            </div>
+          </div>
+
+      </div>
+        <!-- /storeComponent-->
+      </div>
+      <!-- / Content -->
+    </div>
 
 
     <div class="content-backdrop fade"></div>
@@ -133,22 +121,22 @@
   <nav class="nav-app">
     <div class="nav__list">
       <div class="nav__btn">
-        <a class="nav__link unclicked" href="userHome.html" th:href="@{/user}">
+        <a class="nav__link unclicked" href="newUserHome.html" th:href="@{/user}">
           <i class='bx bx-home fs-1 lh-0' ></i>
         </a>
       </div>
       <div class="nav__btn">
-        <a class="nav__link" href="search.html" th:href="@{/user/search}">
+        <a class="nav__link unclicked" href="newSearch.html" th:href="@{/user/search}">
           <i class='bx bx-search fs-1 lh-0' ></i>
         </a>
       </div>
       <div class="nav__btn">
-        <a class="nav__link unclicked" href="favorite.html" th:href="@{/user/favorite}">
+        <a class="nav__link unclicked" href="newFavorite.html" th:href="@{/user/favorite}">
           <i class='bx bx-heart fs-1 lh-0' ></i>
         </a>
       </div>
       <div class="nav__btn">
-        <a class="nav__link unclicked" href="info.html" th:href="@{/user/info}">
+        <a class="nav__link" href="info.html" th:href="@{/user/info}">
           <i class='bx bx-user fs-1 lh-0' ></i>
         </a>
       </div>

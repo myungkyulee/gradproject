@@ -13,7 +13,6 @@ import project.gradproject.repository.UserRepository;
 import project.gradproject.repository.WaitingRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
