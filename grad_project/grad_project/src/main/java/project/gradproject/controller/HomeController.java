@@ -26,6 +26,7 @@ public class HomeController {
 
     @GetMapping("/login")
     public String loginForm() {
+        log.info("login!!!!!!!!!!!!!!!!!!");
         return "home";
     }
 

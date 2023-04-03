@@ -14,7 +14,7 @@ public class StoreJoinForm {
     private String name;
     @NotEmpty
     @Email
-    private String email;
+    private String username;
     @NotEmpty
     private String password;
 

@@ -9,9 +9,13 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class PrincipalDetails<T extends Member> implements UserDetails {
+public class PrincipalDetails implements UserDetails {
 
-    private T member;
+    private Member member;
+
+    public PrincipalDetails(Member member){
+        this.member = member;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

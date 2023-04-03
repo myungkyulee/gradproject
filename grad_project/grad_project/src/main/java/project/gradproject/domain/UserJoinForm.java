@@ -2,7 +2,6 @@ package project.gradproject.domain;
 
 
 import lombok.Data;
-import project.gradproject.domain.user.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -15,7 +14,7 @@ public class UserJoinForm {
     // 로그인 아이디 패스워드
     @NotEmpty
     @Email
-    private String email;
+    private String username;
     @NotEmpty
     private String password;
 }

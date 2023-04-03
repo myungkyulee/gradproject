@@ -30,12 +30,12 @@ public class UserService {
     @Transactional
     public String join(UserJoinForm userFrom) {
         // 중복회원 검증은 나중에
-        if (userRepository.existsByEmail(userFrom.getEmail())) {
+        if (userRepository.existsByEmail(userFrom.getUsername())) {
             throw new RuntimeException("이미 존재하는 회원입니다.");
         }
 
         User user = User.builder()
-                .email(userFrom.getEmail())
+                .email(userFrom.getUsername())
                 .password(passwordEncoder.encode(userFrom.getPassword()))
                 .name(userFrom.getName())
                 .build();
