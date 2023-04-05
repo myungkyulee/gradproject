@@ -2,6 +2,7 @@ package project.gradproject;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import project.gradproject.domain.Keyword;
 import project.gradproject.domain.store.Store;
@@ -24,6 +25,7 @@ public class TestDataInit {
     private final WaitingService waitingService;
     private final KeywordService keywordService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init(){
@@ -32,6 +34,7 @@ public class TestDataInit {
         store1.setEmail("skdlaudrb@naver.com");
         store1.setPassword("asd123!");
         store1.setName("GAMARO");
+        store1.setRole("STORE");
         store1.setTableCount(10);
         store1.setRestTableCount(10);
         store1.setLocationX(126.9313759);
@@ -45,6 +48,7 @@ public class TestDataInit {
         store2.setEmail("test@test.com");
         store2.setPassword("qwe");
         store2.setName("월순");
+        store2.setRole("STORE");
         store2.setTableCount(20);
         store2.setRestTableCount(20);
         store2.setLocationX(126.9290697);
@@ -59,6 +63,7 @@ public class TestDataInit {
         store3.setEmail("asd");
         store3.setPassword("asd");
         store3.setName("간판없는가게");
+        store3.setRole("STORE");
         store3.setTableCount(20);
         store3.setRestTableCount(20);
         store3.setLocationX(126.9902802);
@@ -73,18 +78,21 @@ public class TestDataInit {
         User user1=new User();
         user1.setName("이명규");
         user1.setEmail("test");
-        user1.setPassword("test");
+        user1.setRole("USER");
+        user1.setPassword(passwordEncoder.encode("test"));
         user1.setLocationName("위치를 설정해주세요");
 
         User user2=new User();
         user2.setName("변상욱");
         user2.setEmail("test2");
-        user2.setPassword("test2");
+        user2.setRole("USER");
+        user2.setPassword(passwordEncoder.encode("test2"));
         user1.setLocationName("위치를 설정해주세요");
         User user3=new User();
         user3.setName("안진수");
         user3.setEmail("test3");
-        user3.setPassword("test3");
+        user3.setRole("USER");
+        user3.setPassword(passwordEncoder.encode("test3"));
         user1.setLocationName("위치를 설정해주세요");
         // 키워드 저장
         Keyword keyword1 = new Keyword();

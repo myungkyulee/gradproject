@@ -2,7 +2,6 @@ package project.gradproject.security.principalDetails;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import project.gradproject.domain.user.User;
@@ -11,7 +10,7 @@ import project.gradproject.security.PrincipalDetails;
 
 @Service
 @RequiredArgsConstructor
-public class UserPrincipalDetailsService implements UserDetailsService {
+public class UserPrincipalDetailsService implements PrincipalDetailsService {
 
     public final UserRepository userRepository;
 

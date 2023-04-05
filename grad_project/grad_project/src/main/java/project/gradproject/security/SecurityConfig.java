@@ -3,7 +3,6 @@ package project.gradproject.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,23 +10,16 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 import java.util.Collection;
-import java.util.List;
 
 @Slf4j
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final MyUsernamePasswordAuthenticationFilter myUsernamePasswordAuthenticationFilter;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -41,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable()
+                .addFilterBefore(myUsernamePasswordAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/store/**").hasRole("STORE")
@@ -61,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 }))
                 .and()
                 .logout().logoutSuccessUrl("/login");
+
         /*http.csrf().disable()
                 .authorizeRequests()
                 //.antMatchers("/user/**").hasRole("USER")
