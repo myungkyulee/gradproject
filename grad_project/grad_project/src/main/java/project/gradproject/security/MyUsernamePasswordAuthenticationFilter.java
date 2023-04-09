@@ -33,7 +33,7 @@ public class MyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuth
         String type = request.getParameter("type");
 
         UsernamePasswordAuthenticationToken authRequest = new MyAuthenticationToken(username, password, type);
-        // Allow subclasses to set the "details" property
+
         setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);
     }

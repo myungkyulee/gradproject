@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import project.gradproject.domain.store.Store;
 import project.gradproject.repository.StoreRepository;
-import project.gradproject.security.PrincipalDetails;
 
 // 시큐리티 설정에서 loginProcessingUrl("/login");
 // /login 요청이 오면 자동으로 loadUserByUsername 함수가 실행됨

@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import project.gradproject.domain.user.User;
 import project.gradproject.repository.UserRepository;
-import project.gradproject.security.PrincipalDetails;
 
 @Service
 @RequiredArgsConstructor

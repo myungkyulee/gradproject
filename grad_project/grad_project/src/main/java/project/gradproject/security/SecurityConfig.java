@@ -40,8 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/store/**").hasRole("STORE")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").permitAll()
-                .successHandler(((request, response, authentication) -> {
+                .formLogin().loginPage("/login")
+                //.defaultSuccessUrl("/store")
+                .successHandler((request, response, authentication) -> {
                     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
                     for (GrantedAuthority authority : authorities) {
                         if (authority.getAuthority().equals("ROLE_USER")) {
@@ -52,35 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             return;
                         }
                     }
-                }))
+                })
+                .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login");
-
-        /*http.csrf().disable()
-                .authorizeRequests()
-                //.antMatchers("/user/**").hasRole("USER")
-                //.antMatchers("/store/**").hasRole("STORE")
-                //.antMatchers("/join/**", "/login/**").permitAll()
-                .anyRequest().authenticated()
-                //.and()
-                //.formLogin().loginPage("/login").permitAll()
-                *//*.loginProcessingUrl("/login")
-                .successHandler((request, response, authentication) -> {
-                    List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
-
-                    for (GrantedAuthority authority : authorities) {
-                        log.info(authority.getAuthority());
-                    }
-                    GrantedAuthority type = authorities.get(0);
-                    if (type.getAuthority().equals("store")) {
-                        response.sendRedirect("/store");
-                    } else {
-                        response.sendRedirect("/user");
-                    }
-                })
-                .defaultSuccessUrl("/")*//*
-                *//*.and()
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)*//*;*/
 
     }
 }

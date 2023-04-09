@@ -32,9 +32,9 @@ public class TestDataInit {
         // 테스트 가게정보 저장
         Store store1 = new Store();
         store1.setEmail("skdlaudrb@naver.com");
-        store1.setPassword("asd123!");
+        store1.setPassword(passwordEncoder.encode("asd123!"));
         store1.setName("GAMARO");
-        store1.setRole("STORE");
+        store1.setRole("ROLE_STORE");
         store1.setTableCount(10);
         store1.setRestTableCount(10);
         store1.setLocationX(126.9313759);
@@ -46,9 +46,9 @@ public class TestDataInit {
 
         Store store2 = new Store();
         store2.setEmail("test@test.com");
-        store2.setPassword("qwe");
+        store2.setPassword(passwordEncoder.encode("qwe"));
         store2.setName("월순");
-        store2.setRole("STORE");
+        store2.setRole("ROLE_STORE");
         store2.setTableCount(20);
         store2.setRestTableCount(20);
         store2.setLocationX(126.9290697);
@@ -61,9 +61,9 @@ public class TestDataInit {
 
         Store store3 = new Store();
         store3.setEmail("asd");
-        store3.setPassword("asd");
+        store3.setPassword(passwordEncoder.encode("asd"));
         store3.setName("간판없는가게");
-        store3.setRole("STORE");
+        store3.setRole("ROLE_STORE");
         store3.setTableCount(20);
         store3.setRestTableCount(20);
         store3.setLocationX(126.9902802);
@@ -78,20 +78,20 @@ public class TestDataInit {
         User user1=new User();
         user1.setName("이명규");
         user1.setEmail("test");
-        user1.setRole("USER");
+        user1.setRole("ROLE_USER");
         user1.setPassword(passwordEncoder.encode("test"));
         user1.setLocationName("위치를 설정해주세요");
 
         User user2=new User();
         user2.setName("변상욱");
         user2.setEmail("test2");
-        user2.setRole("USER");
+        user2.setRole("ROLE_USER");
         user2.setPassword(passwordEncoder.encode("test2"));
         user1.setLocationName("위치를 설정해주세요");
         User user3=new User();
         user3.setName("안진수");
         user3.setEmail("test3");
-        user3.setRole("USER");
+        user3.setRole("ROLE_USER");
         user3.setPassword(passwordEncoder.encode("test3"));
         user1.setLocationName("위치를 설정해주세요");
         // 키워드 저장
@@ -120,10 +120,6 @@ public class TestDataInit {
         keywordService.saveKeyword(keyword4);
         keywordService.saveKeyword(keyword5);
         keywordService.saveKeyword(keyword6);
-
-
-
-
 
         userRepository.save(user1);
         userRepository.save(user2);

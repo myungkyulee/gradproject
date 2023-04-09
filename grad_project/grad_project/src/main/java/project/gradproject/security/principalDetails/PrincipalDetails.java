@@ -1,4 +1,4 @@
-package project.gradproject.security;
+package project.gradproject.security.principalDetails;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

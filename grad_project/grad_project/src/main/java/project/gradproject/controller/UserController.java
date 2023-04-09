@@ -42,7 +42,9 @@ public class UserController {
     private final KeywordService keywordService;
 
     @GetMapping
+    @ResponseBody
     public String userHome(HttpServletRequest request, Model model) {
+
         HttpSession session = request.getSession(false);
 
         if (session == null) return "redirect:/";

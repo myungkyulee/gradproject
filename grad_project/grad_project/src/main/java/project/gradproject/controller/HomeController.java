@@ -91,4 +91,9 @@ public class HomeController {
         session.invalidate();
         return "redirect:/";
     }
+
+    @GetMapping("/error")
+    public String error(){
+        return "error";
+    }
 }
