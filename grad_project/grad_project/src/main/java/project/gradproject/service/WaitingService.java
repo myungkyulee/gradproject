@@ -8,12 +8,16 @@ import project.gradproject.domain.waiting.StoreWaitingDTO;
 import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.user.User;
+import project.gradproject.exception.MyCustomException;
 import project.gradproject.repository.StoreRepository;
 import project.gradproject.repository.UserRepository;
 import project.gradproject.repository.WaitingRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static project.gradproject.exception.ErrorCode.NOT_FOUND_STORE;
+import static project.gradproject.exception.ErrorCode.NOT_FOUND_USER;
 
 @Service
 @Transactional(readOnly =true)
@@ -26,8 +30,10 @@ public class WaitingService {
 
     @Transactional
     public Long waiting(Long userId, Long storeId, int peopleNum){
-        User user = userRepository.findById(userId);
-        Store store = storeRepository.findById(storeId);
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new MyCustomException(NOT_FOUND_STORE));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new MyCustomException(NOT_FOUND_USER));
 
         Waiting waiting = Waiting.createWaiting(user, store,peopleNum);
         waitingRepository.save(waiting);

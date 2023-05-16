@@ -18,36 +18,37 @@ public class UserRepository {
     private final EntityManager em;
 
     @Transactional
-    public void save(User user){
+    public void save(User user) {
         em.persist(user);
     }
 
-    public User findById(Long userId){
-        return em.find(User.class, userId);
+    public Optional<User> findById(Long userId) {
+        return Optional.ofNullable(em.find(User.class, userId));
     }
 
-    public List<User> findByName(String name){
+    public List<User> findByName(String name) {
         TypedQuery<User> name1 = em.createQuery("select u from User u where u.name = :name", User.class);
         return em.createQuery("select u from User u where u.name = :name", User.class)
                 .setParameter("name", name)
                 .getResultList();
     }
 
-    public boolean existsByEmail(String email){
+    public boolean existsByEmail(String email) {
         String jpql = "select count(u) > 0 from User u where u.email = :email";
-        TypedQuery<Boolean> query = em.createQuery(jpql, Boolean.class);
-        query.setParameter("email", email);
-        return query.getSingleResult();
+
+        return em.createQuery(jpql, Boolean.class)
+                .setParameter("email", email)
+                .getSingleResult();
     }
 
-    public Optional<User> findByEmail(String email){
+    public Optional<User> findByEmail(String email) {
         String jpql = "select u from User u where u.email = :email";
         TypedQuery<User> query = em.createQuery(jpql, User.class);
         query.setParameter("email", email);
         return Optional.ofNullable(query.getSingleResult());
     }
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         return em.createQuery("select u from User u", User.class)
                 .getResultList();
     }

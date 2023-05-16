@@ -1,11 +1,14 @@
-package project.gradproject.domain;
+package project.gradproject.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class StoreDTO {
 
     @NotEmpty

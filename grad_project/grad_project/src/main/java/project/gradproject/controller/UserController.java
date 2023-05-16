@@ -6,11 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import project.gradproject.annotation.CurrentUserId;
+import project.gradproject.annotation.LoginCheck;
 import project.gradproject.domain.Favorite;
-import project.gradproject.domain.StoreDTO;
-import project.gradproject.domain.store.Address;
+import project.gradproject.domain.MemberType;
+import project.gradproject.dto.StoreDTO;
 import project.gradproject.domain.store.Store;
-import project.gradproject.domain.store.StoreDist;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.SearchWord;
 import project.gradproject.domain.user.User;
@@ -18,16 +19,12 @@ import project.gradproject.domain.waiting.Waiting;
 import project.gradproject.domain.waiting.WaitingDTO;
 import project.gradproject.domain.waiting.WaitingStatus;
 import project.gradproject.service.KeywordService;
-import project.gradproject.service.StoreService;
-import project.gradproject.service.UserService;
+import project.gradproject.service.store.StoreService;
+import project.gradproject.service.user.UserService;
 import project.gradproject.service.WaitingService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -42,42 +39,50 @@ public class UserController {
     private final KeywordService keywordService;
 
     @GetMapping
-    @ResponseBody
-    public String userHome(HttpServletRequest request, Model model) {
-
-        HttpSession session = request.getSession(false);
-
-        if (session == null) return "redirect:/";
-        Long loginUserId = (Long) session.getAttribute("loginUserId");
-        if (loginUserId == null) return "redirect:/";
-
-
+    @LoginCheck(type = MemberType.USER)
+    public String userHome(@CurrentUserId Long userId, Model model) {
+        log.info("userHome method, userId = {}", userId);
         List<StoreDTO> stores;
-        User user = userService.findOne(loginUserId);
+        User user = userService.findOne(userId);
 
         if (user.getLocationX() == null || user.getLocationY() == null) {
-            List<Store> stores1 = storeService.findStores();
-            stores = storeService.setStoreDTO(stores1);
+            stores = storeService.findStoresPage(0).getStores();
         } else {
-            List<Store> storeList = userService.sortByDistance(user);
-            stores = storeService.setStoreDTO(storeList);
+            stores = storeService.findStoresByDistance(user.getLocationX(), user.getLocationY(), 0);
         }
-
 
         model.addAttribute("stores", stores);
         model.addAttribute("user", user);
         return "user/newUserHome";
     }
 
+    @GetMapping("/moreStores")
+    public String getMoreStores(@CurrentUserId Long userId,
+                            @RequestParam(defaultValue = "0") int page, Model model) {
+        log.info("getStores called {}", page);
+        log.info("userId = {}", userId);
+
+        List<StoreDTO> stores;
+        User user = userService.findOne(userId);
+
+        if (user.getLocationX() == null || user.getLocationY() == null) {
+            stores = storeService.findStoresPage(page).getStores();
+        } else {
+            stores = storeService.findStoresByDistance(user.getLocationX(), user.getLocationY(), page);
+        }
+
+        model.addAttribute("stores", stores);
+
+        return "fragments/storecomponent";
+    }
+
     @GetMapping("/{storeName}")
+    @LoginCheck(type = MemberType.USER)
     public String storeWindow(@PathVariable("storeName") String name,
-                              HttpServletRequest request,
+                              @CurrentUserId Long userId,
                               Model model) {
-        HttpSession session = request.getSession(false);
-        if (session == null) return "redirect:/";
-        Long loginUserId = (Long) session.getAttribute("loginUserId");
-        if (loginUserId == null) return "redirect:/";
-        User user = userService.findOne(loginUserId);
+
+        User user = userService.findOne(userId);
         Store store = storeService.findOneByName(name);
         List<Favorite> favorites = user.getFavorites();
         boolean check = false;
@@ -102,21 +107,18 @@ public class UserController {
 
 
     @PostMapping("/{storeName}")
+    @LoginCheck(type = MemberType.USER)
     public String waiting(@PathVariable("storeName") String name,
                           @RequestParam("peopleNum") Integer peopleNum,
-                          HttpServletRequest request,
+                          @CurrentUserId Long userId,
                           Model model) {
 
         System.out.println("name = " + name);
         System.out.println("peopleNum = " + peopleNum);
-        // 사용자 id를 session에서 꺼냄 (로그인유지)
-        HttpSession session = request.getSession(false);
-        if (session == null) return "redirect:/";
-        Long loginUserId = (Long) session.getAttribute("loginUserId");
-        if (loginUserId == null) return "redirect:/";
+
 
         Store store = storeService.findOneByName(name);
-        User user = userService.findOne(loginUserId);
+        User user = userService.findOne(userId);
 
         List<Waiting> waitingOnList = getWaitingOnList(user);
         int count = waitingOnList.size();
@@ -144,23 +146,20 @@ public class UserController {
 
 
     @GetMapping("/search")
+    @LoginCheck(type = MemberType.USER)
     public String search(@ModelAttribute("keyword") String keyword,
-                         HttpServletRequest request,
+                         @CurrentUserId Long userId,
                          Model model) {
-        HttpSession session = request.getSession(false);
-        if (session == null) return "redirect:/";
-        Long loginUserId = (Long) session.getAttribute("loginUserId");
-        if (loginUserId == null) return "redirect:/";
 
         if (keyword.equals("")) {
-            User user = userService.findOne(loginUserId);
+            User user = userService.findOne(userId);
             List<SearchWord> searchWords = user.getSearchWords();
 
             model.addAttribute("keywords", searchWords);
             return "user/newSearchForm";
         }
 
-        userService.addSearchWord(loginUserId, keyword);
+        userService.addSearchWord(userId, keyword);
 
         List<String> keywords = keywordService.splitKeyword(keyword);
         List<Store> storeList = storeService.findKeywordStores(keywords);
@@ -183,12 +182,10 @@ public class UserController {
 
     //ajax 공부전까지 찜하기 처리는 이렇게 처리한다
     @GetMapping("/favorite/{storeName}")
+    @LoginCheck(type = MemberType.USER)
     public String favorite(@PathVariable("storeName") String name,
-                           HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        if (session == null) return "redirect:/";
-        Long userId = (Long) session.getAttribute("loginUserId");
-        if (userId == null) return "redirect:/";
+                           @CurrentUserId Long userId, Model model) {
+
         Store store = storeService.findOneByName(name);
         User user = userService.findOne(userId);
         List<Favorite> favorites = user.getFavorites();
@@ -209,12 +206,9 @@ public class UserController {
 
 
     @GetMapping("/favorite")
-    public String favoriteList(HttpServletRequest request,
+    @LoginCheck(type = MemberType.USER)
+    public String favoriteList(@CurrentUserId Long userId,
                                Model model) {
-        HttpSession session = request.getSession();
-        if (session == null) return "redirect:/";
-        Long userId = (Long) session.getAttribute("loginUserId");
-        if (userId == null) return "redirect:/";
 
         User user = userService.findOne(userId);
 
@@ -232,13 +226,8 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public String info(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
-
-        if(session==null) return "redirect:/";
-        Long userId = (Long)session.getAttribute("loginUserId");
-        if(userId==null) return "redirect:/";
-
+    @LoginCheck(type = MemberType.USER)
+    public String info(@CurrentUserId Long userId, Model model){
         User user = userService.findOne(userId);
 
         model.addAttribute("user",user);
@@ -247,12 +236,8 @@ public class UserController {
     }
 
     @GetMapping("/currentWaitingList")
-    public String currentList(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
-
-        if(session==null) return "redirect:/";
-        Long userId = (Long)session.getAttribute("loginUserId");
-        if(userId==null) return "redirect:/";
+    @LoginCheck(type = MemberType.USER)
+    public String currentList(@CurrentUserId Long userId, Model model){
 
         User user = userService.findOne(userId);
 
@@ -265,12 +250,8 @@ public class UserController {
     }
 
     @GetMapping("/lastWaitingList")
-    public String lastList(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
-
-        if(session==null) return "redirect:/";
-        Long userId = (Long)session.getAttribute("loginUserId");
-        if(userId==null) return "redirect:/";
+    @LoginCheck(type = MemberType.USER)
+    public String lastList(@CurrentUserId Long userId, Model model){
 
         User user = userService.findOne(userId);
         List<Waiting> waitingList = user.getWaitingList();
@@ -282,12 +263,8 @@ public class UserController {
     }
 
     @GetMapping("/location")
-    public String location(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession();
-
-        if(session==null) return "redirect:/";
-        Long userId = (Long)session.getAttribute("loginUserId");
-        if(userId==null) return "redirect:/";
+    @LoginCheck(type = MemberType.USER)
+    public String location(@CurrentUserId Long userId, Model model){
 
         User user = userService.findOne(userId);
         model.addAttribute("user",user);
@@ -295,20 +272,12 @@ public class UserController {
     }
 
     @PostMapping("/location")
-    public String locationUpdate(HttpServletRequest request,
+    @LoginCheck(type = MemberType.USER)
+    public String locationUpdate(@CurrentUserId Long userId,
                             @RequestParam("location") String location,
                                  @RequestParam("x") Double x,
                                  @RequestParam("y") Double y){
-        HttpSession session = request.getSession();
-        System.out.println("OK");
-        System.out.println("OK");
-        System.out.println(location);
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println("OK");
-        if(session==null) return "redirect:/";
-        Long userId = (Long)session.getAttribute("loginUserId");
-        if(userId==null) return "redirect:/";
+
 
         User user = userService.findOne(userId);
 

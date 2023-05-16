@@ -64,6 +64,79 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../assets/js/config.js"></script>
+
+    <!-- Firebase SDK 로드 -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-messaging.js"></script>
+
+    <script>
+        // Firebase 초기화
+        var firebaseConfig = {
+            apiKey: /* API 키 */,
+            authDomain: /* 인증 도메인 */,
+            projectId: /* 프로젝트 ID */,
+            storageBucket: /* 스토리지 버킷 */,
+            messagingSenderId: /* 발신자 ID */,
+            appId: /* 앱 ID */,
+            measurementId: /* 측정 ID */
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Firebase Messaging 설정
+        var messaging = firebase.messaging();
+        messaging.usePublicVapidKey(/* VAPID 공개키 */);
+        messaging.onTokenRefresh(function() {
+            messaging.getToken().then(function(refreshedToken) {
+                console.log('FCM 토큰 갱신:', refreshedToken);
+            }).catch(function(error) {
+                console.error('FCM 토큰 갱신 실패:', error);
+            });
+        });
+    </script>
+
+    <script>
+        // FCM 구독 정보 수집
+        document.addEventListener('DOMContentLoaded', function() {
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                // Service Worker 등록
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('Service Worker 등록 성공:', registration);
+
+                    // FCM 구독 수행
+                    registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: /* VAPID 공개키 */
+                    }).then(function(subscription) {
+                        console.log('FCM 구독 수행 성공:', subscription);
+
+                        // 서버로 FCM 구독 정보 전송
+                        const subscriptionData = {
+                            endpoint: subscription.endpoint,
+                            keys: {
+                                p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')))),
+                                auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth'))))
+                            }
+                        };
+                        fetch('/subscribe', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(subscriptionData)
+                        }).then(function(response) {
+                            console.log('FCM 구독 정보 전송 성공:', response);
+                        }).catch(function(error) {
+                            console.error('FCM 구독 정보 전송 실패:', error);
+                        });
+                    }).catch(function(error) {
+                        console.error('FCM 구독 수행 실패:', error);
+                    });
+                }).catch(function(error) {
+                    console.error('Service Worker 등록 실패:', error);
+                });
+            }
+        });
+    </script>
 </head>
 
 <body>

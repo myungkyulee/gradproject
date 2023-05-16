@@ -3,7 +3,7 @@ package project.gradproject.domain.store;
 
 import lombok.Getter;
 import lombok.Setter;
-import project.gradproject.domain.Member;
+import project.gradproject.domain.MemberType;
 import project.gradproject.domain.waiting.Waiting;
 
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-public class Store implements Member {
+public class Store {
 
     @Id
     @GeneratedValue
@@ -26,6 +26,8 @@ public class Store implements Member {
     private String name;
     private String phoneNumber;
 
+    @Enumerated
+    private MemberType type;
 
     private Integer tableCount;  // 가게에 있는 총 테이블 개수
 
@@ -37,8 +39,8 @@ public class Store implements Member {
 
     // 주소, 위치
     private String locationName;
-    private Double locationX;
-    private Double locationY;
+    private Double locationX; // 경도
+    private Double locationY; // 위도
 
     //권한
     private String role;

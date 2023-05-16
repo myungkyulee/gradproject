@@ -1,22 +1,29 @@
-package project.gradproject.service;
+package project.gradproject.service.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.gradproject.domain.Favorite;
+import project.gradproject.domain.MemberType;
 import project.gradproject.domain.UserJoinForm;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.user.SearchWord;
 import project.gradproject.domain.user.User;
+import project.gradproject.exception.MyCustomException;
 import project.gradproject.repository.FavoriteRepository;
 import project.gradproject.repository.StoreRepository;
 import project.gradproject.repository.UserRepository;
+import project.gradproject.utils.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static project.gradproject.exception.ErrorCode.NOT_FOUND_STORE;
+import static project.gradproject.exception.ErrorCode.NOT_FOUND_USER;
+
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -38,6 +45,7 @@ public class UserService {
                 .email(userFrom.getUsername())
                 .password(passwordEncoder.encode(userFrom.getPassword()))
                 .name(userFrom.getName())
+                .type(MemberType.USER)
                 .build();
 
         userRepository.save(user);
@@ -49,15 +57,21 @@ public class UserService {
     }
 
     public User login(String loginId, String password) {
+        log.debug("service login!!!!!!!!!!!!!!!!");
         return userRepository.findByEmail(loginId)
                 .filter(user -> user.getPassword().equals(password))
                 .orElse(null);
     }
 
-    public User findOne(Long userId) {
-        return userRepository.findById(userId);
+    public User findOne(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new MyCustomException(NOT_FOUND_USER));
     }
 
+    public User findOneByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new MyCustomException(NOT_FOUND_USER));
+    }
 
     public List<String> splitKeyword(String searchStr) {
         String s = "";
@@ -92,8 +106,10 @@ public class UserService {
 
     @Transactional
     public void favorite(Long storeId, Long userId) {
-        Store store = storeRepository.findById(storeId);
-        User user = userRepository.findById(userId);
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new MyCustomException(NOT_FOUND_STORE));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new MyCustomException(NOT_FOUND_USER));
         Favorite favorite = Favorite.createFavorite(store, user);
         user.getFavorites().add(favorite);
 
@@ -102,7 +118,8 @@ public class UserService {
 
     @Transactional
     public void addSearchWord(Long userId, String word) {
-        User user = userRepository.findById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new MyCustomException(NOT_FOUND_USER));
 
         SearchWord searchWord = new SearchWord();
         searchWord.setWord(word);
@@ -128,8 +145,7 @@ public class UserService {
         favoriteRepository.remove(favorite);
         user.getFavorites().remove(favorite);
     }
-
-
+/*
     // 모든 Store User와의 절대 거리가 짧은 순으로 정렬해서 리턴
     public List<Store> sortByDistance(User user) {
 
@@ -185,7 +201,7 @@ public class UserService {
             sortedStore.add(storeDists.get(i).getStore());
         }
         return sortedStore;
-    }
+    }*/
 
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
         double dLat = Math.toRadians(lat2 - lat1);

@@ -11,9 +11,8 @@ import project.gradproject.domain.StoreJoinForm;
 import project.gradproject.domain.UserJoinForm;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreStatus;
-import project.gradproject.domain.user.User;
-import project.gradproject.service.StoreService;
-import project.gradproject.service.UserService;
+import project.gradproject.service.store.StoreService;
+import project.gradproject.service.user.UserService;
 
 
 @Slf4j
@@ -32,8 +31,6 @@ public class JoinController {
 
     @GetMapping("/store")
     public String addStoreForm(@ModelAttribute("member") StoreJoinForm store) {
-
-
         return "join/addStoreForm";
     }
 
@@ -42,10 +39,6 @@ public class JoinController {
         if (result.hasErrors()) {
             return "join/addStoreForm";
         }
-        /*if(storeForm.getTableCount()==null){
-            result.rejectValue("tableCount",);
-        }*/
-
 
         String ad = storeForm.getLocationName();
 
@@ -69,9 +62,12 @@ public class JoinController {
     }
 
     @GetMapping("/store/location")
-    public String storeLocation(@ModelAttribute("store") StoreJoinForm storeJoinForm, Model model) {
+    public String storeLocation(@ModelAttribute("store") StoreJoinForm storeJoinForm,
+                                Model model) {
 
-        if (storeJoinForm.getLocationName() == null) storeJoinForm.setLocationName("위치를 설정해주세요");
+        if (storeJoinForm.getLocationName() == null) {
+            storeJoinForm.setLocationName("위치를 설정해주세요");
+        }
         model.addAttribute("user", storeJoinForm);
         return "user/location";
     }
@@ -82,12 +78,6 @@ public class JoinController {
                                  @RequestParam("x") Double x,
                                  @RequestParam("y") Double y,
                                  Model model) {
-
-        System.out.println("OK");
-        System.out.println(location);
-        System.out.println(x);
-        System.out.println(y);
-
         StoreJoinForm storeJoinForm = new StoreJoinForm();
         storeJoinForm.setLocationName(location);
         storeJoinForm.setLocationX(x);
@@ -113,6 +103,4 @@ public class JoinController {
         userService.join(userForm);
         return "redirect:/login";
     }
-
-
 }

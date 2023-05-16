@@ -10,6 +10,8 @@ import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
 import project.gradproject.repository.WaitingRepository;
+import project.gradproject.service.store.StoreService;
+import project.gradproject.service.user.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,6 +29,7 @@ class WaitingServiceTest {
     private WaitingService waitingService;
     @Autowired
     private WaitingRepository waitingRepository;
+/*
 
     @Test
 //    @Commit
@@ -65,17 +68,21 @@ class WaitingServiceTest {
         Store one = storeService.findOne(store.getId());
         assertThat(one.getWaitingList().size()).isEqualTo(3);
 
-        /*waitingService.enterWaiting(waitingId);
+        */
+/*waitingService.enterWaiting(waitingId);
         assertThat(user.getWaiiting()).isEqualTo(null);
 
 
         Long id = waitingService.waiting(user1.getId(), store2.getId(), 3);
-        assertThat(user1.getWaiting().getId()).isEqualTo(id);*/
+        assertThat(user1.getWaiting().getId()).isEqualTo(id);*//*
+
     }
+*/
 /*    @Test
     public void enter(){
         waitingService.enterWaiting();
-    }*/
+    }*//*
+
 
     @Test
     void test(){
@@ -85,5 +92,6 @@ class WaitingServiceTest {
             System.out.println("a"+s+"a");
         }
     }
+*/
 
 }

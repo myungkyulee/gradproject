@@ -11,9 +11,11 @@ public class MemberLoginForm {
 
     @NotEmpty
     private String type;
+
     @NotEmpty
     @Email
     private String email;
+
     @NotEmpty
     private String password;
 

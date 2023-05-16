@@ -11,6 +11,8 @@ import project.gradproject.domain.Keyword;
 import project.gradproject.domain.store.Store;
 import project.gradproject.domain.store.StoreStatus;
 import project.gradproject.domain.user.User;
+import project.gradproject.service.store.StoreService;
+import project.gradproject.service.user.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
