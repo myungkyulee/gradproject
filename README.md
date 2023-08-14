@@ -20,7 +20,7 @@
 
 ## 기술 스택
 
-### - Java/Spring
+### - Java/Spring, Jpa
 ### - Thymeleaf
 
 <br>
